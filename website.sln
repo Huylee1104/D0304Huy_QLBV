@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36310.24
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QLBV", "QLBV\QLBV.csproj", "{15B73D3A-81BC-4094-9B17-321E011AA5C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Huy_QLBV", "Huy_QLBV\Huy_QLBV.csproj", "{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15B73D3A-81BC-4094-9B17-321E011AA5C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B73D3A-81BC-4094-9B17-321E011AA5C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B73D3A-81BC-4094-9B17-321E011AA5C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B73D3A-81BC-4094-9B17-321E011AA5C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA13747E-73E7-43D0-8A8C-414C4A5D21EB}
+	EndGlobalSection
+EndGlobal

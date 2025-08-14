@@ -1,0 +1,129 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+    padding: 10px; /* cách lề toàn trang 10px */
+    box-sizing: border-box;
+}
+
+.content {
+    height: calc(100%); /* toàn màn hình trừ tiêu đề */
+    display: flex;
+}
+
+.loc {
+    flex: 1; /* 1 phần */
+    box-sizing: border-box;
+}
+
+.view {
+    flex: 3; /* 4 phần => loc/view = 1/4 => loc/(loc+view) = 1/5 */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 10px 10px 10px;
+    max-height: 100%; /* Giới hạn chiều cao tối đa theo vùng chứa cha */
+    overflow-y: auto; /* bật cuộn dọc cho phần bảng */
+}
+
+.form_table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.form_table th,
+.form_table td {
+    border: 1px solid black;
+    padding: 4px;
+}
+
+.mau_header th {
+    background-color: darkgray;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+input {
+    border-radius: 5px; /*Bo góc*/
+    border: 1px solid #999; /*Viền*/
+    padding-left: 8px;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: 2px solid #2a82e0; /* Viền màu xanh dày 3px */
+}
+
+input:not(:focus):hover {
+    border-color: #000;
+}
+
+.dropdownList {
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    position: absolute;
+    top: 100%; /* Hiển thị ngay dưới input */
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    z-index: 1055; /* Cao hơn modal */
+}
+
+.dropdownList div {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.dropdownList div:hover {
+    background-color: #e9ecef;
+}
+
+/* Mỗi option */
+.option-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Option được highlight mặc định hoặc khi di chuyển bằng phím */
+.option-item.highlight {
+    background-color: #e9ecef; /* Màu mờ */
+}
+
+.highlight-text {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    font-size: 16px;
+    position: relative; /* thêm dòng này */
+}
+
+.item .button {
+    display: flex;
+    gap: 10px; /* khoảng cách giữa các nút */
+    align-items: center;
+    width: 100%;
+}
+
+.trai {
+    text-align: left !important;
+    padding-left: 8px;
+}
+
+.giua {
+    text-align: center !important;
+}
+
+.phai {
+    text-align: right !important;
+    padding-right: 8px;
+}
