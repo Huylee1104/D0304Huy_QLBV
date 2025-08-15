@@ -145,3 +145,4 @@ D:\Code\website\Huy_QLBV\obj\Debug\net8.0\refint\Huy_QLBV.dll
 D:\Code\website\Huy_QLBV\obj\Debug\net8.0\Huy_QLBV.pdb
 D:\Code\website\Huy_QLBV\obj\Debug\net8.0\Huy_QLBV.genruntimeconfig.cache
 D:\Code\website\Huy_QLBV\obj\Debug\net8.0\ref\Huy_QLBV.dll
+D:\Code\website\Huy_QLBV\obj\Debug\net8.0\Huy_QLBV.sourcelink.json

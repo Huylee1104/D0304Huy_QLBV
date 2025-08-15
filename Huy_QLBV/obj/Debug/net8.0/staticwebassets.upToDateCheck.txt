@@ -1,4 +1,5 @@
 wwwroot\dist\css\site.css
+wwwroot\dist\css\W0304\W0304_Report.css
 wwwroot\dist\data\json\W0304\W0304DM_HTTT.json
 wwwroot\dist\data\json\W0304\W0304Dm_NhanVien.json
 wwwroot\dist\img\W0304\logo.png
@@ -2311,4 +2312,3 @@ wwwroot\dist\libs\jquery\dist\jquery.min.js
 wwwroot\dist\libs\jquery\dist\jquery.min.map
 wwwroot\dist\libs\jquery\LICENSE.txt
 wwwroot\favicon.ico
-wwwroot\dist\css\W0304\W0304_Report.css

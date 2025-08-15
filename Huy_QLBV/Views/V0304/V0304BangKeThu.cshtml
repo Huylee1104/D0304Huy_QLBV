@@ -26,63 +26,92 @@
 <body>
     <div class="card p-1">
         <div class="content">
-            <div class="loc">
-                <div>
-                    <form id="myForm" action="~/C0304BangKeThu/Index" method="post">
-                        <div class="item">
-                            <label for="myDate" class="form-label">Đến ngày</label>
-                            <div class="input-group date" id="datepicker">
-                                <input type="text" class="form-control" id="myDate" name="NgayBatDau"
-                                       placeholder="dd-mm-yyyy" autocomplete="off" value="@ViewBag.NgayBatDau" data-ngay="@ViewBag.NgayBatDau" />
-                                <span class="input-group-text" id="datepicker-icon">
-                                    <i class="bi bi-calendar-date"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <label for="myDate2" class="form-label">Đến ngày</label>
-                            <div class="input-group date" id="datepicker2">
-                                <input type="text" class="form-control" id="myDate2" name="NgayKetThuc"
-                                       placeholder="dd-mm-yyyy" autocomplete="off" value="@ViewBag.NgayKetThuc" data-ngay2="@ViewBag.NgayKetThuc" />
-                                <span class="input-group-text" id="datepicker-icon2">
-                                    <i class="bi bi-calendar-date"></i></span>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <label for="NhanVien">Nhân viên</label>
-                            <input type="text" id="comboBox2" name="tenNhanVien" data-value="@ViewBag.tenNhanVien">
-                            <input type="hidden" id="IDNhanVien" name="IDNhanVien" data-value="@ViewBag.IDNhanVien" />
-                            <div class="dropdownList" id="dropdownList2"></div>
-                        </div>
-                        <div class="item">
-                            <label for="HTTT">Hình thức thanh toán</label>
-                            <input type="text" id="comboBox" name="tenHTTT" data-value="@ViewBag.tenHTTT">
-                            <input type="hidden" id="IDHTTT" name="IDHTTT" data-value="@ViewBag.IDHTTT" />
-                            <div class="dropdownList" id="dropdownList"></div>
-                        </div>
-                        <input type="hidden" id="IDChiNhanh" name="IDChiNhanh" />
-                        <div class="item">
-                            <div class="button">
-                                <div>
-                                    <button class="btn btn-primary" type="submit">Tải Danh sách</button>
+            <div class="ngang">
+                <div class="loc">
+                    <div>
+                        <form id="myForm" action="~/C0304BangKeThu/Index" method="post">
+                            <div class="item">
+                                <div class="row" style="padding:0; margin-right: 10px">
+                                    <div style="width: 100%; padding:0; margin: 0 10px">
+                                        <label class="form-label" >Giai đoạn</label>
+                                        <select id="selectGiaiDoan" class="form-select">
+                                            <option value="Nam" selected>Năm</option>
+                                            <option value="Quy" >Quý</option>
+                                            <option value="Thang" >Tháng</option>
+                                            <option value="Ngay" >Ngày</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div>
-                                    <a href="~/C0304BangKeThu/ExportPdf" class="btn btn-danger" target="_blank">
-                                        PDF
-                                    </a>
-                                </div>
-                                <div>
-                                    <a href="~/C0304BangKeThu/ExportExcel" class="btn btn-success">
-                                        Excel
-                                    </a>
+                                <!-- Container chứa Năm và Quý (dùng width 48%) -->
+                                <div id="selectContainer"
+                                     style="margin: 5px 0; display: flex; padding:0;justify-content: flex-start; align-items: flex-start; flex-wrap: wrap;">
+                                    <!-- Năm và Quý sẽ được thêm vào đây -->
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                            <div class="item">
+                                <label for="myDate" class="form-label">Từ ngày</label>
+                                <div class="input-group date" id="datepicker">
+                                    <input type="text" class="form-control" id="myDate" name="NgayBatDau"
+                                           placeholder="dd-mm-yyyy" autocomplete="off" value="@ViewBag.NgayBatDau" data-ngay="@ViewBag.NgayBatDau" />
+                                    <span class="input-group-text" id="datepicker-icon">
+                                        <i class="bi bi-calendar-date"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label for="myDate2" class="form-label">Đến ngày</label>
+                                <div class="input-group date" id="datepicker2">
+                                    <input type="text" class="form-control" id="myDate2" name="NgayKetThuc"
+                                           placeholder="dd-mm-yyyy" autocomplete="off" value="@ViewBag.NgayKetThuc" data-ngay2="@ViewBag.NgayKetThuc" />
+                                    <span class="input-group-text" id="datepicker-icon2">
+                                        <i class="bi bi-calendar-date"></i></span>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <label for="NhanVien">Nhân viên</label>
+                                <input type="text" id="comboBox2" name="tenNhanVien" data-value="@ViewBag.tenNhanVien">
+                                <input type="hidden" id="IDNhanVien" name="IDNhanVien" data-value="@ViewBag.IDNhanVien" />
+                                <div class="dropdownList" id="dropdownList2"></div>
+                            </div>
+                            <div class="item">
+                                <label for="HTTT">Hình thức thanh toán</label>
+                                <input type="text" id="comboBox" name="tenHTTT" data-value="@ViewBag.tenHTTT">
+                                <input type="hidden" id="IDHTTT" name="IDHTTT" data-value="@ViewBag.IDHTTT" />
+                                <div class="dropdownList" id="dropdownList"></div>
+                            </div>
+                            <input type="hidden" id="IDChiNhanh" name="IDChiNhanh" />
+                            <div class="item">
+                                <div class="button">
+                                    <div>
+                                        <button class="btn btn-primary" type="submit">Tải Danh sách</button>
+                                    </div>
+                                    @{
+                                        bool hasPermission = ViewBag.quyenVaiTro.Xuat;
+                                        string pdfHref = hasPermission ? Url.Content("~/C0304BangKeThu/ExportPdf") : null;
+                                        string excelHref = hasPermission ? Url.Content("~/C0304BangKeThu/ExportExcel") : null;
+                                    }
+
+                                    <div>
+                                        <a href="@pdfHref"
+                                           class="btn btn-danger @(hasPermission ? "" : "disabled")"
+                                           @(hasPermission ? "" : "tabindex='-1' aria-disabled='true'")>
+                                            PDF
+                                        </a>
+                                    </div>
+
+                                    <div>
+                                        <a href="@excelHref"
+                                           class="btn btn-success @(hasPermission ? "" : "disabled")"
+                                           @(hasPermission ? "" : "tabindex='-1' aria-disabled='true'")>
+                                            Excel
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="view">
-                <div class="table-wrapper">
+                <div class="view">
                     <table class="form_table">
                         <thead>
                             <tr class="mau_header">
@@ -99,31 +128,98 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (list != null && list.Count > 0)
-                            {
-                                foreach (var item in list)
+                            @{
+                                var tong = (ViewBag.CurrentPage - 1) * ViewBag.PageSize + 1;
+                                if (list != null && list.Count > 0)
                                 {
-                                    <tr>
-                                        <td class="giua">@stt</td>
-                                        <td class="giua">@item.MaYTe</td>
-                                        <td class="trai">@item.HoVaTen</td>
-                                        <td class="giua">@item.QuyenSo</td>
-                                        <td class="giua">@item.SoBienLai</td>
-                                        <td class="giua">@item.Loai</td>
-                                        <td class="giua">@(item.NgayThu?.ToString("dd/MM/yyyy"))</td>
-                                        <td class="phai">@(item.Huy.HasValue? item.Huy.Value.ToString("N2", System.Globalization.CultureInfo.InvariantCulture) : "")</td>
-                                        <td class="phai">@(item.Hoan.HasValue? item.Hoan.Value.ToString("N2", System.Globalization.CultureInfo.InvariantCulture) : "")</td>
-                                        <td class="phai">@(item.SoTien.HasValue? item.SoTien.Value.ToString("N2", System.Globalization.CultureInfo.InvariantCulture) : "")</td>
-                                    </tr>
-                                    stt++;
+                                    foreach (var item in list)
+                                    {
+                                        <tr>
+                                            <td class="giua">@stt</td>
+                                            <td class="giua">@item.MaYTe</td>
+                                            <td class ="trai">@item.HoVaTen</td>
+                                            <td class="giua">@item.QuyenSo</td>
+                                            <td class="giua">@item.SoBienLai</td>
+                                            <td class="giua">@item.Loai</td>
+                                            <td class="giua">@(item.NgayThu?.ToString("dd/MM/yyyy"))</td>
+                                            <td class ="phai">@(item.Huy?.ToString("N2", System.Globalization.CultureInfo.InvariantCulture))</td>
+                                            <td class="phai">@(item.Hoan?.ToString("N2", System.Globalization.CultureInfo.InvariantCulture))</td>
+                                            <td class="phai">@(item.SoTien?.ToString("N2", System.Globalization.CultureInfo.InvariantCulture))</td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="10" class="text-center">Không có dữ liệu</td></tr>
                                 }
                             }
                         </tbody>
                     </table>
-                </div>
-                <div class="phan_trang">
+                </div>  
+            </div>
+            <div class="phan_trang">
+                <div class="dropdown-position">
+                    <form asp-action="Index" method="post" class="form-inline" style="display: flex; align-items: center; gap: 8px;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="page" value="1" />
 
+                        <label for="pageSize" class="mb-0" style="margin-right: 6px; white-space: nowrap;">Số bản ghi mỗi trang:</label>
+                        <select name="pageSize" id="pageSize" class="form-control " style="width:auto; min-width:70px; padding-right: 10px;" onchange="this.form.submit()">
+                            <option value="5" selected="@(ViewBag.PageSize == 5)">5</option>
+                            <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
+                            <option value="15" selected="@(ViewBag.PageSize == 15)">15</option>
+                        </select>
+                    </form>
                 </div>
+                <div class="dropdown-position">
+                    <nav aria-label="Page navigation" class="pagination-wrapper">
+                        <ul class="pagination mb-0">
+
+                            @if (ViewBag.TotalPages > 1)
+                            {
+                                // Previous
+                                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                    <form asp-action="Index" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="page" value="@(ViewBag.CurrentPage - 1)" />
+                                        <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+                                        <button type="submit" class="page-link" @(ViewBag.CurrentPage == 1 ? "disabled" : "")>Trước</button>
+                                    </form>
+                                </li>
+
+                                // Numbered pages
+                                @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                        <form asp-action="Index" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="page" value="@i" />
+                                            <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+                                            <button type="submit" class="page-link">@i</button>
+                                        </form>
+                                    </li>
+                                }
+
+                                // Next
+                                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                    <form asp-action="Index" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="page" value="@(ViewBag.CurrentPage + 1)" />
+                                        <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
+                                        <button type="submit" class="page-link" @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")>Sau</button>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+                @if (ViewBag.TotalPages > 1 && ViewBag.TotalItems > 0)
+                {
+                    <div class="dropdown-position">
+                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages - Tổng @ViewBag.TotalItems bản ghi
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -142,6 +238,19 @@
     <script src="@Url.Content("~/dist/js/W0304/W0304_Report.js")"></script>
 
     <script>
+        var isFirstLoadFromServer = @(ViewBag.IsFirstLoadFromServer.ToString().ToLower());
+
+        function changePage(newPage) {
+            document.getElementById("page").value = newPage;
+            document.getElementById("paginationForm").submit();
+        }
+
+        function changePageSize(newSize) {
+            document.getElementById("pageSize").value = newSize;
+            document.getElementById("page").value = 1; // reset về trang 1
+            document.getElementById("paginationForm").submit();
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             ["comboBox2", "IDNhanVien", "comboBox", "IDHTTT"].forEach(id => {
                 const el = document.getElementById(id);

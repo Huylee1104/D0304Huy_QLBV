@@ -27,7 +27,10 @@ namespace S0304NhanVien.Services
                 return new List<M0304NhanVienModel>();
 
             var json = File.ReadAllText(_filePath);
-            return JsonConvert.DeserializeObject<List<M0304NhanVienModel>>(json);
+            var nhanVienList = JsonConvert.DeserializeObject<List<M0304NhanVienModel>>(json);
+
+            // Sắp xếp danh sách theo thứ tự Alphabet dựa trên thuộc tính TenNhanVien
+            return nhanVienList.OrderBy(nv => nv.Ten).ToList();
         }
     }
 }

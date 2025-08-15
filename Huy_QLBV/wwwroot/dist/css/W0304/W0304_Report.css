@@ -6,24 +6,37 @@
 }
 
 .content {
-    height: calc(100%); /* toàn màn hình trừ tiêu đề */
+    height: 100%; /* toàn màn hình trừ tiêu đề calc*/
     display: flex;
+    flex-direction: column;
+}
+
+.ngang {
+    flex: 1; /* chiếm toàn bộ phần còn lại */
+    display: flex; /* loc và view nằm ngang */
 }
 
 .loc {
     flex: 1; /* 1 phần */
-    box-sizing: border-box;
 }
 
 .view {
-    flex: 3; /* 4 phần => loc/view = 1/4 => loc/(loc+view) = 1/5 */
-    box-sizing: border-box;
+    flex: 4; /* 4 phần => loc/view = 1/4 => loc/(loc+view) = 1/5 */
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 0 10px 10px 10px;
     max-height: 100%; /* Giới hạn chiều cao tối đa theo vùng chứa cha */
     overflow-y: auto; /* bật cuộn dọc cho phần bảng */
+}
+
+.phan_trang {
+    height: 70px;
+    display: flex; /* các phần tử con nằm ngang */
+    align-items: center; /* canh giữa theo chiều dọc */
+    justify-content: flex-end; /* dồn sang phải */
+    gap: 10px;
+    padding: 0 10px;
 }
 
 .form_table {
@@ -55,6 +68,21 @@ input:focus {
 }
 
 input:not(:focus):hover {
+    border-color: #000;
+}
+
+select {
+    border-radius: 5px; /*Bo góc*/
+    border: 1px solid #999; /*Viền*/
+    padding-left: 8px;
+    font-size: 16px;
+}
+
+select:focus {
+    outline: 2px solid #2a82e0; /* Viền màu xanh dày 3px */
+}
+
+select:not(:focus):hover {
     border-color: #000;
 }
 
@@ -109,9 +137,10 @@ input:not(:focus):hover {
 
 .item .button {
     display: flex;
-    gap: 10px; /* khoảng cách giữa các nút */
+    gap: 15px; /* khoảng cách giữa các nút */
     align-items: center;
     width: 100%;
+    margin-top: 10px;
 }
 
 .trai {
@@ -126,4 +155,9 @@ input:not(:focus):hover {
 .phai {
     text-align: right !important;
     padding-right: 8px;
+}
+
+.page-link:focus {
+    box-shadow: none !important; /* Bỏ bóng mờ */
+    outline: none !important; /* Bỏ viền nét */
 }

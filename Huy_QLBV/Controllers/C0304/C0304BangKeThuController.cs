@@ -10,6 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using M0304NhanVien.Models;
 using S0304NhanVien.Services;
+using S0304FirstLoadFlat.Services;
+using S0304ThongTinDoanhNghiep.Services;
+using S0304BangKeThu.Services;
+using S0304Report.Services;
 using QLBV.Reports;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
@@ -25,18 +29,44 @@ namespace Huy_QLBV.Controllers.C0304
         private readonly S0304NhanVienService _nhanVienService;
         private readonly string _connectionString;
         private readonly IWebHostEnvironment _env;
+        private readonly S0304FirstLoadFlagService _firstLoadFlag;
+        private readonly IS0304ThongTinDoanhNghiepService _thongTinDoanhNghiep;
+        private readonly IS0304BangKeThuService _bangKeThuService;
+        private readonly IS0304ReportService _reportService;
 
         public C0304BangKeThuController(S0304HTTTService htttService, S0304NhanVienService nhanVienService,
-            IConfiguration configuration, IWebHostEnvironment env)
+            IConfiguration configuration, IWebHostEnvironment env, S0304FirstLoadFlagService firstLoadFlag, 
+            IS0304ThongTinDoanhNghiepService thongTinDoanhNghiep, IS0304BangKeThuService bangKeThuService, IS0304ReportService reportService)
         {
             _htttService = htttService;
             _nhanVienService = nhanVienService;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _env = env;
+            _firstLoadFlag = firstLoadFlag;
+            _thongTinDoanhNghiep = thongTinDoanhNghiep;
+            _bangKeThuService = bangKeThuService;
+            _reportService = reportService;
         }
 
         public IActionResult Index()
         {
+            ViewBag.quyenVaiTro = new
+            {
+                Them = true,
+                Sua = true,
+                Xoa = true,
+                Xuat = true,
+                CaNhan = true,
+                Xem = true,
+            };
+
+            bool firstLoad = _firstLoadFlag.IsFirstLoad;
+
+            if (firstLoad)
+                _firstLoadFlag.IsFirstLoad = false; // chỉ dùng 1 lần sau restart server
+
+            ViewBag.IsFirstLoadFromServer = firstLoad;
+
             // Lấy danh sách HTTT
             var dsHTTT = _htttService.GetAllHTTT();
             System.Diagnostics.Debug.WriteLine("DSHTTT: " + Newtonsoft.Json.JsonConvert.SerializeObject(dsHTTT));
@@ -47,24 +77,77 @@ namespace Huy_QLBV.Controllers.C0304
             System.Diagnostics.Debug.WriteLine("DSNhanVien: " + Newtonsoft.Json.JsonConvert.SerializeObject(dsNhanVien));
             ViewBag.DSNhanVien = dsNhanVien;
 
-            //var initial = new { NgayBatDau = (string)null, NgayKetThuc = (string)null };
-            //ViewBag.InitialRange = JsonConvert.SerializeObject(initial);
             return View("~/Views/V0304/V0304BangKeThu.cshtml");
         }
 
         [HttpPost]
-        public IActionResult Index(string NgayBatDau, string NgayKetThuc, long IDChiNhanh, long? IDHTTT, long? IDNhanVien)
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(string NgayBatDau, string NgayKetThuc, 
+            long IDChiNhanh, long? IDHTTT, long? IDNhanVien, int page, int pageSize)
         {
-            // 1. Gọi Stored Procedure với tham số NgayBatDau, NgayKetThuc
-            var data = CallStoredProcedure(NgayBatDau, NgayKetThuc, IDChiNhanh, IDHTTT, IDNhanVien);
-            ViewBag.Data = data;
+            ViewBag.quyenVaiTro = new
+            {
+                Them = true,
+                Sua = true,
+                Xoa = true,
+                Xuat = true,
+                CaNhan = true,
+                Xem = true,
+            };
 
-            // Lưu tham số vào Session
-            HttpContext.Session.SetString("NgayBatDau", NgayBatDau);
-            HttpContext.Session.SetString("NgayKetThuc", NgayKetThuc);
-            HttpContext.Session.SetString("IDChiNhanh", IDChiNhanh.ToString());
-            HttpContext.Session.SetString("IDHTTT", IDHTTT?.ToString() ?? "");
-            HttpContext.Session.SetString("IDNhanVien", IDNhanVien?.ToString() ?? "");
+            bool firstLoad = _firstLoadFlag.IsFirstLoad;
+
+            if (firstLoad)
+                _firstLoadFlag.IsFirstLoad = false; // chỉ dùng 1 lần sau restart server
+
+            ViewBag.IsFirstLoadFromServer = firstLoad;
+
+            // ===== Chuẩn hoá page/pageSize =====
+            if (page <= 0) page = 1;
+            if (pageSize <= 0) pageSize = 15;
+
+            // ===== Xác định có filter mới từ form hay không =====
+            bool hasNewFilter =
+                !(string.IsNullOrWhiteSpace(NgayBatDau)
+               && string.IsNullOrWhiteSpace(NgayKetThuc)
+               && IDChiNhanh == 0
+               && IDHTTT == null
+               && IDNhanVien == null);
+
+            if (!hasNewFilter)
+            {
+                // Không có filter mới -> đọc từ Session
+                NgayBatDau = HttpContext.Session.GetString("NgayBatDau");
+                NgayKetThuc = HttpContext.Session.GetString("NgayKetThuc");
+
+                var sChiNhanh = HttpContext.Session.GetString("IDChiNhanh");
+                IDChiNhanh = long.TryParse(sChiNhanh, out var _idcn) ? _idcn : 0;
+
+                var sHTTT = HttpContext.Session.GetString("IDHTTT");
+                IDHTTT = long.TryParse(sHTTT, out var _idht) ? _idht : (long?)null;
+
+                var sNV = HttpContext.Session.GetString("IDNhanVien");
+                IDNhanVien = long.TryParse(sNV, out var _idnv) ? _idnv : (long?)null;
+            }
+            else
+            {
+                // Có filter mới -> lưu vào Session
+                HttpContext.Session.SetString("NgayBatDau", NgayBatDau ?? "");
+                HttpContext.Session.SetString("NgayKetThuc", NgayKetThuc ?? "");
+                HttpContext.Session.SetString("IDChiNhanh", IDChiNhanh.ToString());
+                HttpContext.Session.SetString("IDHTTT", IDHTTT?.ToString() ?? "");
+                HttpContext.Session.SetString("IDNhanVien", IDNhanVien?.ToString() ?? "");
+            }
+
+            // 1. Gọi Stored Procedure với tham số NgayBatDau, NgayKetThuc
+            var data = _bangKeThuService.S0304BangKeThu(NgayBatDau, NgayKetThuc, IDChiNhanh, IDHTTT, IDNhanVien);
+            var totalItems = data.Count;
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            if (totalPages == 0) totalPages = 1;
+            if (page > totalPages) page = totalPages;
+
+            var pagedData = data.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            ViewBag.Data = pagedData;
 
             // 2. Load thêm dữ liệu khác (nếu cần)
             var dsHTTT = _htttService.GetAllHTTT();
@@ -75,6 +158,7 @@ namespace Huy_QLBV.Controllers.C0304
 
             // Lấy tên từ ID
             var tenHTTT = dsHTTT.FirstOrDefault(x => x.id == IDHTTT)?.ten ?? "";
+
             var tenNhanVien = dsNhanVien.FirstOrDefault(x => x.Id == IDNhanVien)?.Ten ?? "";
 
             // Truyền cho view
@@ -84,96 +168,21 @@ namespace Huy_QLBV.Controllers.C0304
             ViewBag.IDNhanVien = IDNhanVien;
             ViewBag.NgayBatDau = NgayBatDau;
             ViewBag.NgayKetThuc = NgayKetThuc;
+            ViewBag.IDChiNhanh = IDChiNhanh;
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
 
             return View("~/Views/V0304/V0304BangKeThu.cshtml");
         }
 
-        public List<M0304Huy_Mau4> CallStoredProcedure(
-            string NgayBatDau,
-            string NgayKetThuc,
-            long idCN,
-            long? idHTTT = null,
-            long? idNhanVien = null)
-        {
-            var result = new List<M0304Huy_Mau4>();
-
-            using (var conn = new SqlConnection(_connectionString))
-            using (var cmd = new SqlCommand("Huy_BKTTNT", conn))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue("@TuNgay", NgayBatDau);
-                cmd.Parameters.AddWithValue("@DenNgay", NgayKetThuc);
-                cmd.Parameters.AddWithValue("@IDCN", idCN);
-                cmd.Parameters.AddWithValue("@IDHTTT", (object?)idHTTT ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@IDNhanVien", (object?)idNhanVien ?? DBNull.Value);
-
-                conn.Open();
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var item = new M0304Huy_Mau4
-                        {
-                            STT = reader["STT"] != DBNull.Value ? Convert.ToInt32(reader["STT"]) : 0,
-                            MaYTe = reader["MaYTe"] as string,
-                            HoVaTen = reader["HoVaTen"] as string,
-                            QuyenSo = reader["QuyenSo"] as string,
-                            SoBienLai = reader["SoBienLai"] as string,
-                            Loai = reader["Loai"] as string,
-                            NgayThu = reader["NgayThu"] != DBNull.Value ? (DateTime?)reader["NgayThu"] : null,
-                            Huy = reader["Huy"] != DBNull.Value ? (decimal?)reader["Huy"] : null,
-                            Hoan = reader["Hoan"] != DBNull.Value ? (decimal?)reader["Hoan"] : null,
-                            SoTien = reader["SoTien"] != DBNull.Value ? (decimal?)reader["SoTien"] : null,
-                            IDCN = reader["IDCN"] != DBNull.Value ? (long?)reader["IDCN"] : null,
-                            IDHTTT = reader["IDHTTT"] != DBNull.Value ? (long?)reader["IDHTTT"] : null,
-                            IDNhanVien = reader["IDNhanVien"] != DBNull.Value ? (long?)reader["IDNhanVien"] : null
-                        };
-                        result.Add(item);
-                    }
-                }
-            }
-            return result;
-        }
-
-        private List<M0304ThongTinDoanhNghiep> CallStoredDN(long idCN)
-        {
-            var DN = new List<M0304ThongTinDoanhNghiep>();
-
-            using (var conn = new SqlConnection(_connectionString))
-            {
-                using (var cmd = new SqlCommand("Huy_TTDN", conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    // Truyền thẳng chuỗi hoặc DBNull nếu null hoặc rỗng
-                    cmd.Parameters.AddWithValue("@id", idCN);
-
-                    conn.Open();
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var item = new M0304ThongTinDoanhNghiep
-                            {
-                                TenCSKCB = reader["TenCSKCB"] as string,
-                                TenCoQuanChuyenMon = reader["TenCoQuanChuyenMon"] as string,
-                                DiaChi = reader["DiaChi"] as string,
-                                DienThoai = reader["DienThoai"] as string
-                            };
-                            DN.Add(item);
-                        }
-                    }
-                }
-            }
-            return DN;
-        }
-
-        public IActionResult ExportPdf()
+        public async Task<IActionResult> ExportPdf()
         {
             QuestPDF.Settings.License = LicenseType.Community;
 
-            // Lấy lại tham số từ Session
+            // Lấy tham số từ Session
             string NgayBatDau = HttpContext.Session.GetString("NgayBatDau");
             string NgayKetThuc = HttpContext.Session.GetString("NgayKetThuc");
             long IDChiNhanh = Convert.ToInt64(HttpContext.Session.GetString("IDChiNhanh") ?? "0");
@@ -183,137 +192,74 @@ namespace Huy_QLBV.Controllers.C0304
             var logoPath = Path.Combine(_env.WebRootPath, "dist", "img", "W0304", "logo.png");
 
             // Lấy dữ liệu từ service
-            var nvService = new S0304NhanVienService(_env);
-            var htttService = new S0304HTTTService(_env);
-            // Lấy dữ liệu từ stored procedure
-            var data = CallStoredProcedure(NgayBatDau, NgayKetThuc, IDChiNhanh, IDHTTT, IDNhanVien);
+            var reportData = await _reportService.S0304ReportData(NgayBatDau, NgayKetThuc, IDChiNhanh, IDHTTT, IDNhanVien);
 
-            string tenHTTT = htttService.GetAllHTTT()
-                .FirstOrDefault(ht => ht.id == IDHTTT)?.ten ?? "Tất cả";
-
-            List<M0304NhanVienModel> danhSachNhanVien = null;
-            string tenNhanVien = "Tất cả nhân viên";
-            if (IDNhanVien != 0)
-            {
-                tenNhanVien = nvService.GetAllNhanVien()
-                    .FirstOrDefault(nv => nv.Id == IDNhanVien)?.Ten ?? "Không rõ";
-            }
-            else
-            {
-                // Lấy danh sách ID nhân viên thực tế có trong _data
-                var idNhanVienCoDuLieu = data
-                    .Select(d => d.IDNhanVien)
-                    .Distinct()
-                    .ToList();
-
-                // Lấy danh sách nhân viên từ service nhưng chỉ giữ lại những ID này
-                danhSachNhanVien = nvService.GetAllNhanVien()
-                    .Where(nv => idNhanVienCoDuLieu.Contains(nv.Id))
-                    .ToList();
-            }
-
-            if (data == null || !data.Any())
+            if (reportData?.Data == null || !reportData.Data.Any())
                 return Content("Không có dữ liệu để xuất PDF.");
 
-            // Tính tổng các giá trị
-            decimal tongHuy = data.Sum(r => r.Huy ?? 0m);
-            decimal tongHoan = data.Sum(r => r.Hoan ?? 0m);
-            decimal tongSoTien = data.Sum(r => r.SoTien ?? 0m);
-            decimal tongChenhLech = data.Sum(r => (r.SoTien ?? 0m) - ((r.Huy ?? 0m) + (r.Hoan ?? 0m)));
-            // Tính toán theo nhân viên
-            var tongTheoNhanVien = data
-            .GroupBy(r => r.IDNhanVien)
-            .Select(g => new M0304TongTheoNhanVien
-            {
-                IDNhanVien = g.Key ?? 0,
-                TongHuy = g.Sum(x => x.Huy ?? 0m),
-                TongHoan = g.Sum(x => x.Hoan ?? 0m),
-                TongSoTien = g.Sum(x => x.SoTien ?? 0m),
-                TongChenhLech = g.Sum(x => (x.SoTien ?? 0m) - ((x.Huy ?? 0m) + (x.Hoan ?? 0m)))
-            }).ToList();
+            // Tạo template PDF
+            var document = new P0304ReportTemplatePDF(
+                reportData.Data,             // List<M0304Huy_Mau4>
+                reportData.DataDN,
+                reportData.NgayBatDau,
+                reportData.NgayKetThuc,
+                reportData.TenNhanVien,
+                reportData.TenHTTT,
+                reportData.LogoPath,
+                reportData.TongHuy,
+                reportData.TongHoan,
+                reportData.TongSoTien,
+                reportData.TongChenhLech,
+                reportData.DanhSachNhanVien,
+                reportData.TongTheoNhanVien
+            );
 
-            var dataDN = CallStoredDN(IDChiNhanh); // Lấy thông tin doanh nghiệp
-            // Tạo template
-            var document = new P0304ReportTemplatePDF(data, dataDN, NgayBatDau,
-                NgayKetThuc, tenNhanVien, tenHTTT, logoPath, tongHuy, tongHoan, tongSoTien,
-                tongChenhLech, danhSachNhanVien, tongTheoNhanVien);
+            // Sinh file PDF
             var pdfBytes = document.GeneratePdf();
 
+            // Trả file về client
             Response.Headers["Content-Disposition"] = "attachment; filename=Report.pdf";
-
             return File(pdfBytes, "application/pdf");
         }
 
-        public IActionResult ExportExcel()
+        public async Task<IActionResult> ExportExcel()
         {
-            // Lấy lại tham số từ Session
-            string NgayBatDau = HttpContext.Session.GetString("NgayBatDau");
-            string NgayKetThuc = HttpContext.Session.GetString("NgayKetThuc");
-            long IDChiNhanh = Convert.ToInt64(HttpContext.Session.GetString("IDChiNhanh") ?? "0");
-            long IDHTTT = Convert.ToInt64(HttpContext.Session.GetString("IDHTTT") ?? "0");
-            long IDNhanVien = Convert.ToInt64(HttpContext.Session.GetString("IDNhanVien") ?? "0");
-            var logoPath = Path.Combine(_env.WebRootPath, "dist", "img", "W0304", "logo.png");
+        // Lấy tham số từ Session
+        string NgayBatDau = HttpContext.Session.GetString("NgayBatDau");
+        string NgayKetThuc = HttpContext.Session.GetString("NgayKetThuc");
+        long IDChiNhanh = Convert.ToInt64(HttpContext.Session.GetString("IDChiNhanh") ?? "0");
+        long IDHTTT = Convert.ToInt64(HttpContext.Session.GetString("IDHTTT") ?? "0");
+        long IDNhanVien = Convert.ToInt64(HttpContext.Session.GetString("IDNhanVien") ?? "0");
 
-            // Lấy dữ liệu từ service
-            var nvService = new S0304NhanVienService(_env);
-            var htttService = new S0304HTTTService(_env);
+        // Lấy dữ liệu từ service
+        var reportData = await _reportService.S0304ReportData(NgayBatDau, NgayKetThuc, IDChiNhanh, IDHTTT, IDNhanVien);
 
-            // Lấy dữ liệu từ stored procedure
-            var data = CallStoredProcedure(NgayBatDau, NgayKetThuc, IDChiNhanh, IDHTTT, IDNhanVien);
+        if (reportData?.Data == null || !reportData.Data.Any())
+            return Content("Không có dữ liệu để xuất Excel.");
 
-            string tenHTTT = htttService.GetAllHTTT()
-                .FirstOrDefault(ht => ht.id == IDHTTT)?.ten ?? "Tất cả";
-            List<M0304NhanVienModel> danhSachNhanVien = null;
-            string tenNhanVien = "Tất cả nhân viên";
-            if (IDNhanVien != 0)
-            {
-                tenNhanVien = nvService.GetAllNhanVien()
-                    .FirstOrDefault(nv => nv.Id == IDNhanVien)?.Ten ?? "Không rõ";
-            }
-            else
-            {
-                // Lấy danh sách ID nhân viên thực tế có trong _data
-                var idNhanVienCoDuLieu = data
-                    .Select(d => d.IDNhanVien)
-                    .Distinct()
-                    .ToList();
+        // Tạo Excel report
+        var excelReport = new P0304ExcelReportTemplate(
+            reportData.Data,               // ✅ List<M0304Huy_Mau4>
+            reportData.DataDN,
+            reportData.NgayBatDau,
+            reportData.NgayKetThuc,
+            reportData.TenNhanVien,
+            reportData.TenHTTT,
+            reportData.LogoPath,
+            reportData.TongHuy,
+            reportData.TongHoan,
+            reportData.TongSoTien,
+            reportData.TongChenhLech,
+            reportData.DanhSachNhanVien,
+            reportData.TongTheoNhanVien
+        );
 
-                // Lấy danh sách nhân viên từ service nhưng chỉ giữ lại những ID này
-                danhSachNhanVien = nvService.GetAllNhanVien()
-                    .Where(nv => idNhanVienCoDuLieu.Contains(nv.Id))
-                    .ToList();
-            }
+        // Sinh file Excel
+        var excelBytes = excelReport.GenerateExcel();
 
-            if (data == null || !data.Any())
-                return Content("Không có dữ liệu để xuất Excel.");
-
-            // Tính tổng các giá trị
-            decimal tongHuy = data.Sum(r => r.Huy ?? 0m);
-            decimal tongHoan = data.Sum(r => r.Hoan ?? 0m);
-            decimal tongSoTien = data.Sum(r => r.SoTien ?? 0m);
-            decimal tongChenhLech = data.Sum(r => (r.SoTien ?? 0m) - ((r.Huy ?? 0m) + (r.Hoan ?? 0m)));
-            // Tính toán theo nhân viên
-            var tongTheoNhanVien = data
-            .GroupBy(r => r.IDNhanVien)
-            .Select(g => new M0304TongTheoNhanVien
-            {
-                IDNhanVien = g.Key ?? 0,
-                TongHuy = g.Sum(x => x.Huy ?? 0m),
-                TongHoan = g.Sum(x => x.Hoan ?? 0m),
-                TongSoTien = g.Sum(x => x.SoTien ?? 0m),
-                TongChenhLech = g.Sum(x => (x.SoTien ?? 0m) - ((x.Huy ?? 0m) + (x.Hoan ?? 0m)))
-            }).ToList();
-
-            var dataDN = CallStoredDN(IDChiNhanh); // Lấy thông tin doanh nghiệp
-
-            var excelReport = new P0304ExcelReportTemplate(data, dataDN, NgayBatDau, NgayKetThuc,
-                tenNhanVien, tenHTTT, logoPath, tongHuy, tongHoan, tongSoTien,
-                tongChenhLech, danhSachNhanVien, tongTheoNhanVien);
-
-            var excelBytes = excelReport.GenerateExcel();
-
-            Response.Headers["Content-Disposition"] = "attachment; filename=Report.xlsx";
-            return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        // Trả file về client
+        Response.Headers["Content-Disposition"] = "attachment; filename=Report.xlsx";
+        return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
     }
 }
