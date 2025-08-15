@@ -1,9 +1,10 @@
-﻿using System;
+﻿using M0304HTTT.Models;
+using M0304NhanVien.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Web;
-using Newtonsoft.Json;
-using M0304HTTT.Models;
 
 namespace S0304HTTT.Services
 {
@@ -28,7 +29,8 @@ namespace S0304HTTT.Services
                 return new List<M0304DM_HTTT>();
 
             var json = File.ReadAllText(_filePath);
-            return JsonConvert.DeserializeObject<List<M0304DM_HTTT>>(json);
+            var htttList = JsonConvert.DeserializeObject<List<M0304DM_HTTT>>(json);
+            return htttList.OrderBy(httt => httt.ten).ToList();
         }
     }
 }

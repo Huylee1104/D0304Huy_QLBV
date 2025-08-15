@@ -5,9 +5,7 @@ wwwroot\dist\data\json\W0304\W0304Dm_NhanVien.json
 wwwroot\dist\img\W0304\logo.png
 wwwroot\dist\js\site.js
 wwwroot\dist\js\W0304\BienChung.js
-wwwroot\dist\js\W0304\chonngay.bundle.js
-wwwroot\dist\js\W0304\chonngay.bundle.js.LICENSE.txt
-wwwroot\dist\js\W0304\combobox.js
+wwwroot\dist\js\W0304\W0304combobox.js
 wwwroot\dist\js\W0304\W0304_Report.js
 wwwroot\dist\libs\bootstrap-datepicker\css\bootstrap-datepicker.css
 wwwroot\dist\libs\bootstrap-datepicker\css\bootstrap-datepicker.css.map

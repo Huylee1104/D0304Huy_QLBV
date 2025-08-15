@@ -166,6 +166,62 @@ $('#selectGiaiDoan').change(function () {
     }
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('selectGiaiDoan');
+    const selectContainer = document.getElementById('selectContainer');
+    const fromItem = document.getElementById('myDate')?.closest('.item');
+    const toItem   = document.getElementById('myDate2')?.closest('.item');
+
+    // 1. Inject CSS layout
+    const style = document.createElement('style');
+    style.textContent = `
+    #selectContainer {
+        display: flex;
+    flex-wrap: nowrap;       /* luôn cùng hàng */
+    align-items: flex-start;
+    gap: 10px;
+    }
+    #selectContainer > div {
+        flex: 1;
+    min-width: 80px;
+    }
+    `;
+    document.head.appendChild(style);
+
+  // 2. Ẩn/hiện phần tử
+  const toggleDisplay = (el, on) => {
+    if (!el) return;
+    el.style.display = on ? '' : 'none';
+  };
+
+    // 3. Cập nhật UI
+    function updateUI() {
+    const val = select.value;
+    const isNgay = val === 'Ngay';
+
+    toggleDisplay(fromItem, isNgay);
+    toggleDisplay(toItem, isNgay);
+    toggleDisplay(selectContainer, !isNgay);
+
+    if (val === 'Nam' || val === 'Ngay') {
+        selectContainer.style.justifyContent = 'flex-start';
+    } else if (val === 'Quy' || val === 'Thang') {
+        selectContainer.style.justifyContent = 'space-around';
+    }
+
+    // Lưu lựa chọn để reload vẫn nhớ
+    localStorage.setItem('giaiDoan', val);
+  }
+
+    // 4. Khôi phục trạng thái khi load
+    const saved = localStorage.getItem('giaiDoan');
+    if (saved) select.value = saved;
+
+    // 5. Sự kiện và render lần đầu
+    select.addEventListener('change', updateUI);
+    updateUI();
+});
+
 $(document).ready(function () {
     const container = $("#selectContainer");
     const $giaiDoan = $("#selectGiaiDoan");
