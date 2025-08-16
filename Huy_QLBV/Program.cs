@@ -57,12 +57,12 @@ app.UseAuthorization();
 // Route
 app.MapControllerRoute(
     name: "areas",
-    pattern: "{area:exists}/{controller=C0304BangKeThu}/{action=Index}/{id?}"
+    pattern: "{area:exists}/{controller=home}/{action=Index}/{id?}"
 );
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=C0304BangKeThu}/{action=Index}/{id?}"
+    pattern: "{controller=home}/{action=Index}/{id?}"
 );
 
 app.Run();

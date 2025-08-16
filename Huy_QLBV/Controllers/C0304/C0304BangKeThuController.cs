@@ -20,7 +20,7 @@ using System.Globalization;
 
 namespace Huy_QLBV.Controllers.C0304
 {
-    [Route("C0304/BangKeThu")]
+    [Route("C0304BangKeThu")]
     public class C0304BangKeThuController : Controller
     {
         //private string _maChucNang = "/c0304_bang_ke_thu";
@@ -50,7 +50,7 @@ namespace Huy_QLBV.Controllers.C0304
             _reportService = reportService;
             //_memoryCache = memoryCache;
         }
-
+        [HttpGet("")]
         public IActionResult Index()
         {
             //var quyenVaiTro = await _memoryCache.getQuyenVaiTro(_maChucNang);
@@ -88,7 +88,7 @@ namespace Huy_QLBV.Controllers.C0304
             return View("~/Views/V0304/V0304BangKeThu.cshtml");
         }
 
-        [HttpPost]
+        [HttpPost("index")]
         [ValidateAntiForgeryToken]
         public IActionResult Index(string NgayBatDau, string NgayKetThuc, 
             long IDChiNhanh, long? IDHTTT, long? IDNhanVien, int page, int pageSize)
@@ -185,6 +185,7 @@ namespace Huy_QLBV.Controllers.C0304
             return View("~/Views/V0304/V0304BangKeThu.cshtml");
         }
 
+        [HttpGet("ExportPdf")]
         public async Task<IActionResult> ExportPdf()
         {
             QuestPDF.Settings.License = LicenseType.Community;
@@ -223,7 +224,7 @@ namespace Huy_QLBV.Controllers.C0304
             Response.Headers["Content-Disposition"] = "attachment; filename=Report.pdf";
             return File(pdfBytes, "application/pdf");
         }
-
+        [HttpGet("ExportExcel")]
         public async Task<IActionResult> ExportExcel()
         {
         string NgayBatDau = HttpContext.Session.GetString("NgayBatDau");
