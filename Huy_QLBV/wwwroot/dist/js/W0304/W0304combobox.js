@@ -2,6 +2,7 @@
     const input = document.getElementById('comboBox');
     const dropdown = document.getElementById('dropdownList');
     const hiddenId = document.getElementById('IDHTTT');
+    let isMouseDownOnDropdown = false; 
 
     hiddenId.value = 0;
     input.addEventListener('input', () => {
@@ -14,8 +15,22 @@
         }
     });
 
-    let highlightedIndex = -1;
-    let currentOptions = [];
+    dropdown.addEventListener('mousedown', () => {
+        isMouseDownOnDropdown = true;
+    });
+
+    input.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (!isMouseDownOnDropdown) {
+                if (hiddenId.value === "" && input.value.trim() !== "") {
+                    input.value = "";
+                    hiddenId.value = 0;
+                }
+            }
+            isMouseDownOnDropdown = false; 
+            dropdown.style.display = "none";
+        }, 100);
+    });
 
     function removeAccents(str) {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -85,7 +100,10 @@
 
             if (index === highlightedIndex) option.classList.add('highlight');
 
-            option.addEventListener('click', () => selectOption(index));
+            option.addEventListener('mousedown', (e) => {
+                e.preventDefault(); 
+                selectOption(index);
+            });
 
             dropdown.appendChild(option);
         });
@@ -107,6 +125,16 @@
             dropdown.style.display = "none";
         }
     }
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#comboBox') && !e.target.closest('#dropdownList')) {
+            if (hiddenId.value === "" && input.value.trim() !== "") {
+                input.value = "";
+                hiddenId.value = 0;
+            }
+            dropdown.style.display = "none";
+        }
+    });
 
     input.addEventListener('focus', () => renderOptions());
     input.addEventListener('input', () => {
@@ -140,19 +168,23 @@
     });
 
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('#comboBox') && !e.target.closest('#dropdownList')) {
+        const isClickInsideCombo = e.target.closest('#comboBox') || e.target.closest('#dropdownList');
+
+        if (!isClickInsideCombo) {
+            if (hiddenId.value === "" && input.value.trim() !== "") {
+                input.value = "";
+                hiddenId.value = 0;
+            }
             dropdown.style.display = "none";
         }
     });
-
-    console.log("combobox.js loaded");
-    console.log("provincesDataHTTT:", provincesDataHTTT);
-})
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById('comboBox2');
     const dropdown = document.getElementById('dropdownList2');
     const hiddenId = document.getElementById('IDNhanVien');
+    let isMouseDownOnDropdown = false; 
 
     hiddenId.value = 0;
     input.addEventListener('input', () => {
@@ -165,12 +197,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    let highlightedIndex = -1; 
+    let highlightedIndex = -1;
     let currentOptions = [];
+
+    dropdown.addEventListener('mousedown', () => {
+        isMouseDownOnDropdown = true;
+    });
+
+    input.addEventListener('blur', () => {
+        setTimeout(() => {
+            if (!isMouseDownOnDropdown) {
+                if (hiddenId.value === "" && input.value.trim() !== "") {
+                    input.value = "";
+                    hiddenId.value = 0;
+                }
+            }
+            isMouseDownOnDropdown = false;
+            dropdown.style.display = "none";
+        }, 100);
+    });
 
     function removeAccents(str) {
         return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
+
     function highlightMatch(text, keyword) {
         if (!keyword) return text;
 
@@ -215,13 +265,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function renderOptions(filter = "") {
         dropdown.innerHTML = "";
-        highlightedIndex = 0; 
+        highlightedIndex = 0;
         const normalizedFilter = removeAccents(filter.toLowerCase());
 
         currentOptions = provincesDataNhanVien.filter(item =>
             removeAccents((item.Ten || '').toLowerCase()).includes(normalizedFilter) ||
             removeAccents((item.Viettat || "").toLowerCase()).startsWith(normalizedFilter)
         );
+
         currentOptions.forEach((item, index) => {
             const option = document.createElement('div');
             option.classList.add('option-item');
@@ -231,19 +282,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const nameSpan = document.createElement('span');
             nameSpan.innerHTML = highlightedTenNhanVien;
-            nameSpan.style.flex = "1"; 
+            nameSpan.style.flex = "1";
 
             const abbrSpan = document.createElement('span');
             abbrSpan.innerHTML = highlightedVietTat;
             abbrSpan.style.marginLeft = "10px";
-            abbrSpan.style.color = "#888"; 
+            abbrSpan.style.color = "#888";
             abbrSpan.style.fontSize = "12px";
 
             option.appendChild(nameSpan);
             option.appendChild(abbrSpan);
 
             if (index === highlightedIndex) option.classList.add('highlight');
-            option.addEventListener('click', () => selectOption(index));
+
+            option.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                selectOption(index);
+            });
+
             dropdown.appendChild(option);
         });
 
@@ -272,9 +328,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener('load', () => {
         if (hiddenId.value && !input.value) {
-            const selected = provincesDataHTTT.find(x => x.id == hiddenId.value);
+            const selected = provincesDataNhanVien.find(x => x.Id == hiddenId.value);
             if (selected) {
-                input.value = selected.ten;
+                input.value = selected.Ten;
             }
         }
     });
@@ -297,12 +353,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('#comboBox2') && !e.target.closest('#dropdownList2')) {
+        const isClickInsideCombo = e.target.closest('#comboBox2') || e.target.closest('#dropdownList2');
+
+        if (!isClickInsideCombo) {
+            if (hiddenId.value === "" && input.value.trim() !== "") {
+                input.value = "";
+                hiddenId.value = 0;
+            }
             dropdown.style.display = "none";
         }
     });
-
-    console.log("combobox.js loaded");
-    console.log("provincesDataNhanVien:", provincesDataNhanVien); 
 });
 

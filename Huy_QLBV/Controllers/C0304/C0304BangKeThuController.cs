@@ -201,7 +201,12 @@ namespace Huy_QLBV.Controllers.C0304
             var reportData = await _reportService.S0304ReportData(NgayBatDau, NgayKetThuc, IDChiNhanh, IDHTTT, IDNhanVien);
 
             if (reportData?.Data == null || !reportData.Data.Any())
-                return Content("Không có dữ liệu để xuất PDF.");
+            {
+                TempData["ToastType"] = "warning";
+                TempData["ToastMessage"] = "Không có dữ liệu để xuất PDF.";
+
+                return RedirectToAction(""); 
+            }
 
             var document = new P0304ReportTemplatePDF(
                 reportData.Data,
@@ -224,6 +229,7 @@ namespace Huy_QLBV.Controllers.C0304
             Response.Headers["Content-Disposition"] = "attachment; filename=Report.pdf";
             return File(pdfBytes, "application/pdf");
         }
+
         [HttpGet("ExportExcel")]
         public async Task<IActionResult> ExportExcel()
         {
@@ -234,11 +240,15 @@ namespace Huy_QLBV.Controllers.C0304
         long IDNhanVien = Convert.ToInt64(HttpContext.Session.GetString("IDNhanVien") ?? "0");
 
         var reportData = await _reportService.S0304ReportData(NgayBatDau, NgayKetThuc, IDChiNhanh, IDHTTT, IDNhanVien);
-
         if (reportData?.Data == null || !reportData.Data.Any())
-            return Content("Không có dữ liệu để xuất Excel.");
+        {
+            TempData["ToastType"] = "warning";
+            TempData["ToastMessage"] = "Không có dữ liệu để xuất PDF.";
 
-        var excelReport = new P0304ExcelReportTemplate(
+            return RedirectToAction("");
+        }
+
+            var excelReport = new P0304ExcelReportTemplate(
             reportData.Data,       
             reportData.DataDN,
             reportData.NgayBatDau,

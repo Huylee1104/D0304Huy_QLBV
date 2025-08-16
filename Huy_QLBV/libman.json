@@ -13,6 +13,11 @@
     {
       "library": "bootstrap-icons@1.11.3",
       "destination": "wwwroot/dist/lib/bootstrap-icons/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "toastr@2.1.4",
+      "destination": "wwwroot/dist/libs"
     }
   ]
 }

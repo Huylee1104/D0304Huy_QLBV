@@ -16,6 +16,12 @@
 @{
     var stt = 1;
 }
+@{
+    var toastType = TempData["ToastType"] as string;
+    var toastMsgJson = System.Text.Json.JsonSerializer.Serialize(
+        TempData["ToastMessage"]?.ToString() ?? string.Empty
+    );
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,11 +30,13 @@
     <link rel="stylesheet" href="@Url.Content("~/dist/libs/bootstrap/dist/css/bootstrap.min.css")" /> <!---->
     <link rel="stylesheet" href="@Url.Content("~/dist/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/dist/libs/bootstrap-icons/font/bootstrap-icons.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/dist/libs/toastr/toastr.min.css")" />
 
     <script src="~/dist/libs/jquery/dist/jquery.min.js" defer></script> <!---->
     <script src="~/dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script> <!---->
     <script src="~/dist/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js" defer></script>
     <script src="~/dist/libs/bootstrap-datepicker/locales/bootstrap-datepicker.vi.min.js" defer></script>
+    <script src="~/dist/libs/toastr/toastr.min.js" defer></script>
     <script src="@Url.Content("~/dist/js/W0304/W0304combobox.js")" defer></script>
     <script src="@Url.Content("~/dist/js/W0304/BienChung.js")" defer></script>
     <script src="@Url.Content("~/dist/js/W0304/W0304_Report.js")" defer></script>
@@ -92,7 +100,7 @@
                             <div class="item">
                                 <div class="button">
                                     <div>
-                                        <button class="btn btn-primary" type="submit">Tải Danh sách</button>
+                                        <button class="btn btn-primary" type="submit">Tải danh sách</button>
                                     </div>
                                     @{
                                         bool hasPermission = ViewBag.quyenVaiTro.Xuat;
@@ -229,6 +237,25 @@
             </div>
         </div>
     </div>
+    @if (!string.IsNullOrEmpty(toastType))
+    {
+        <script defer>
+            document.addEventListener("DOMContentLoaded", function () {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    positionClass: "toast-bottom-right",
+                    timeOut: 3500
+                };
+
+                var type = '@toastType';
+                var msg = @Html.Raw(toastMsgJson);
+
+                if (toastr[type]) toastr[type](msg);
+                else toastr.info(msg);
+            });
+        </script>
+    }
     <script>
         const provincesDataHTTT = @Html.Raw(jsonHTTT);
         const provincesDataNhanVien = @Html.Raw(jsonNhanVien);

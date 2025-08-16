@@ -11,9 +11,7 @@
         if (chiNhanhEl) {
             chiNhanhEl.value = _idcn;
         }
-    } else {
-        console.warn("Biến _idcn chưa được định nghĩa (kiểm tra BienChung.js)");
-    }
+    } 
 });
 
 function changePage(newPage) {
@@ -35,7 +33,6 @@ $(function () {
         todayHighlight: true,
         language: 'vi'
     }).datepicker('update', ngayBatDau);
-    console.log("Giá trị ViewBag.NgayBatDau:", ngayBatDau);
 
     document.getElementById('myDate').addEventListener('input', function (e) {
         const input = e.target;
