@@ -1,10 +1,7 @@
 ﻿using M0304HTTT.Models;
-using M0304NhanVien.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Web;
 
 namespace S0304HTTT.Services
 {
@@ -14,7 +11,6 @@ namespace S0304HTTT.Services
 
         public S0304HTTTService(IWebHostEnvironment env)
         {
-            // Ghép đường dẫn vật lý tới file
             _filePath = Path.Combine(env.WebRootPath, "dist", "data", "json", "W0304", "W0304DM_HTTT.json");
         }
 
@@ -30,6 +26,7 @@ namespace S0304HTTT.Services
 
             var json = File.ReadAllText(_filePath);
             var htttList = JsonConvert.DeserializeObject<List<M0304DM_HTTT>>(json);
+
             return htttList.OrderBy(httt => httt.ten).ToList();
         }
     }

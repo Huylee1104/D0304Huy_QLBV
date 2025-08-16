@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "D:\\Code\\website\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}|Huy_QLBV\\Huy_QLBV.csproj|d:\\code\\website\\huy_qlbv\\views\\v0304\\v0304bangkethu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}|Huy_QLBV\\Huy_QLBV.csproj|solutionrelative:huy_qlbv\\views\\v0304\\v0304bangkethu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}|Huy_QLBV\\Huy_QLBV.csproj|d:\\code\\website\\huy_qlbv\\wwwroot\\dist\\js\\w0304\\w0304_report.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}|Huy_QLBV\\Huy_QLBV.csproj|solutionrelative:huy_qlbv\\wwwroot\\dist\\js\\w0304\\w0304_report.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}|Huy_QLBV\\Huy_QLBV.csproj|d:\\code\\website\\huy_qlbv\\controllers\\c0304\\c0304bangkethucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A5EF0D6-14F8-4E20-98EF-FBF125104E9C}|Huy_QLBV\\Huy_QLBV.csproj|solutionrelative:huy_qlbv\\controllers\\c0304\\c0304bangkethucontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,28 +22,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "W0304_Report.js",
-              "DocumentMoniker": "D:\\Code\\website\\Huy_QLBV\\wwwroot\\dist\\js\\W0304\\W0304_Report.js",
-              "RelativeDocumentMoniker": "Huy_QLBV\\wwwroot\\dist\\js\\W0304\\W0304_Report.js",
-              "ToolTip": "D:\\Code\\website\\Huy_QLBV\\wwwroot\\dist\\js\\W0304\\W0304_Report.js",
-              "RelativeToolTip": "Huy_QLBV\\wwwroot\\dist\\js\\W0304\\W0304_Report.js",
-              "ViewState": "AgIAAL8AAAAAAAAAAAAIwKUAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-08-15T08:48:29.011Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "V0304BangKeThu.cshtml",
-              "DocumentMoniker": "D:\\Code\\website\\Huy_QLBV\\Views\\V0304\\V0304BangKeThu.cshtml",
-              "RelativeDocumentMoniker": "Huy_QLBV\\Views\\V0304\\V0304BangKeThu.cshtml",
-              "ToolTip": "D:\\Code\\website\\Huy_QLBV\\Views\\V0304\\V0304BangKeThu.cshtml",
-              "RelativeToolTip": "Huy_QLBV\\Views\\V0304\\V0304BangKeThu.cshtml",
-              "ViewState": "AgIAAN8AAAAAAAAAAAAmwOwAAABIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-08-15T08:47:32.602Z",
+              "Title": "C0304BangKeThuController.cs",
+              "DocumentMoniker": "D:\\Code\\website\\Huy_QLBV\\Controllers\\C0304\\C0304BangKeThuController.cs",
+              "RelativeDocumentMoniker": "Huy_QLBV\\Controllers\\C0304\\C0304BangKeThuController.cs",
+              "ToolTip": "D:\\Code\\website\\Huy_QLBV\\Controllers\\C0304\\C0304BangKeThuController.cs",
+              "RelativeToolTip": "Huy_QLBV\\Controllers\\C0304\\C0304BangKeThuController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAYwBYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-16T03:07:42.037Z",
               "EditorCaption": ""
             }
           ]

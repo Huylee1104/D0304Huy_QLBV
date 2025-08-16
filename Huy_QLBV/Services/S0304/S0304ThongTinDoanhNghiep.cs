@@ -1,5 +1,4 @@
-﻿using Huy_QLBV.Models.M0304;
-using M0304NhanVien.Models;
+﻿using M0304.Models.ThongTinDOanhNghiep;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace S0304ThongTinDoanhNghiep.Services
 
             using (var conn = new SqlConnection(_connectionString))
             {
-                using (var cmd = new SqlCommand("Huy_TTDN", conn))
+                using (var cmd = new SqlCommand("D0304_ThongTinDoanhNghiep", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@id", idCN);

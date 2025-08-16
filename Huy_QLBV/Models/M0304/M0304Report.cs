@@ -1,12 +1,13 @@
 ﻿using M0304NhanVien.Models;
 using System.Collections.Generic;
-using Huy_QLBV.Models.M0304; // namespace chứa M0304Huy_Mau4
+using M0304.Models.BangKeThu;
+using M0304.Models.ThongTinDOanhNghiep;
 
 namespace M0304Report.Models
 {
     public class M0304ReportData
     {
-        public List<M0304Huy_Mau4> Data { get; set; }  // ✅ Đổi từ object
+        public List<M0304BangKeThu> Data { get; set; }  // ✅ Đổi từ object
         public List<M0304ThongTinDoanhNghiep> DataDN { get; set; } // nếu DataDN cũng là list
         public string NgayBatDau { get; set; }
         public string NgayKetThuc { get; set; }

@@ -1,5 +1,5 @@
 ﻿
-namespace Huy_QLBV.Models.M0304
+namespace M0304.Models.ThongTinDOanhNghiep
 {
 
 	public partial class M0304ThongTinDoanhNghiep

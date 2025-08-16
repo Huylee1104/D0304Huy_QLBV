@@ -1,4 +1,4 @@
-﻿using Huy_QLBV.Models.M0304;
+﻿using M0304.Models.BangKeThu;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -6,7 +6,7 @@ namespace S0304BangKeThu.Services
 {
     public interface IS0304BangKeThuService
     {
-        List<M0304Huy_Mau4> S0304BangKeThu(string ngayBatDau, string ngayKetThuc, long idCN, long? idHTTT = null, long? idNhanVien = null);
+        List<M0304BangKeThu> S0304BangKeThu(string ngayBatDau, string ngayKetThuc, long idCN, long? idHTTT = null, long? idNhanVien = null);
     }
     public class S0304ReportRepository : IS0304BangKeThuService
     {
@@ -17,12 +17,12 @@ namespace S0304BangKeThu.Services
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public List<M0304Huy_Mau4> S0304BangKeThu(string ngayBatDau, string ngayKetThuc, long idCN, long? idHTTT = null, long? idNhanVien = null)
+        public List<M0304BangKeThu> S0304BangKeThu(string ngayBatDau, string ngayKetThuc, long idCN, long? idHTTT = null, long? idNhanVien = null)
         {
-            var result = new List<M0304Huy_Mau4>();
+            var result = new List<M0304BangKeThu>();
 
             using var conn = new SqlConnection(_connectionString);
-            using var cmd = new SqlCommand("Huy_BKTTNT", conn)
+            using var cmd = new SqlCommand("D0304_BangKeThuTienNgaoiTru", conn)
             {
                 CommandType = CommandType.StoredProcedure
             };
@@ -37,7 +37,7 @@ namespace S0304BangKeThu.Services
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                result.Add(new M0304Huy_Mau4
+                result.Add(new M0304BangKeThu
                 {
                     STT = reader["STT"] != DBNull.Value ? Convert.ToInt32(reader["STT"]) : 0,
                     MaYTe = reader["MaYTe"] as string,

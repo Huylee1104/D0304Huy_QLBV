@@ -1,4 +1,7 @@
 ﻿@{
+    ViewData["NonSixOs"] = true;
+}
+@{
     Layout = null;
 }
 @{
@@ -8,7 +11,7 @@
     var jsonNhanVien = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.DSNhanVien);
 }
 @{
-    var list = ViewBag.Data as List<Huy_QLBV.Models.M0304.M0304Huy_Mau4>;
+    var list = ViewBag.Data as List<M0304.Models.BangKeThu.M0304BangKeThu>;
 }
 @{
     var stt = 1;
@@ -18,10 +21,18 @@
 <head>
     <title>Index</title>
     <link rel="stylesheet" href="@Url.Content("~/dist/css/W0304/W0304_Report.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/dist/libs/bootstrap/dist/css/bootstrap.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/dist/libs/bootstrap/dist/css/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/dist/libs/bootstrap/dist/css/bootstrap.min.css")" /> <!---->
     <link rel="stylesheet" href="@Url.Content("~/dist/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/dist/libs/bootstrap-icons/font/bootstrap-icons.css")" />
+
+    <script src="~/dist/libs/jquery/dist/jquery.min.js" defer></script> <!---->
+    <script src="~/dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script> <!---->
+    <script src="~/dist/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js" defer></script>
+    <script src="~/dist/libs/bootstrap-datepicker/locales/bootstrap-datepicker.vi.min.js" defer></script>
+    <script src="@Url.Content("~/dist/js/W0304/W0304combobox.js")" defer></script>
+    <script src="@Url.Content("~/dist/js/W0304/BienChung.js")" defer></script>
+    <script src="@Url.Content("~/dist/js/W0304/W0304_Report.js")" defer></script>
+
 </head>
 <body>
     <div class="card p-1">
@@ -42,10 +53,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!-- Container chứa Năm và Quý (dùng width 48%) -->
                                 <div id="selectContainer"
                                      style="margin: 5px 0; display: flex; padding:0;justify-content: flex-start; align-items: flex-start; flex-wrap: wrap;">
-                                    <!-- Năm và Quý sẽ được thêm vào đây -->
                                 </div>
                             </div>
                             <div class="item">
@@ -178,7 +187,6 @@
 
                             @if (ViewBag.TotalPages > 1)
                             {
-                                // Previous
                                 <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
                                     <form asp-action="Index" method="post" class="d-inline">
                                         @Html.AntiForgeryToken()
@@ -188,7 +196,6 @@
                                     </form>
                                 </li>
 
-                                // Numbered pages
                                 @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
                                 {
                                     <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
@@ -201,7 +208,6 @@
                                     </li>
                                 }
 
-                                // Next
                                 <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
                                     <form asp-action="Index" method="post" class="d-inline">
                                         @Html.AntiForgeryToken()
@@ -225,41 +231,8 @@
     </div>
     <script>
         const provincesDataHTTT = @Html.Raw(jsonHTTT);
-    </script>
-    <script>
         const provincesDataNhanVien = @Html.Raw(jsonNhanVien);
-    </script>
-    <script src="~/dist/libs/jquery/dist/jquery.min.js"></script>
-    <script src="~/dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/dist/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-    <script src="~/dist/libs/bootstrap-datepicker/locales/bootstrap-datepicker.vi.min.js"></script>
-    <script src="@Url.Content("~/dist/js/W0304/W0304combobox.js")"></script>
-    <script src="@Url.Content("~/dist/js/W0304/BienChung.js")"></script>
-    <script src="@Url.Content("~/dist/js/W0304/W0304_Report.js")"></script>
-
-    <script>
         var isFirstLoadFromServer = @(ViewBag.IsFirstLoadFromServer.ToString().ToLower());
-
-        function changePage(newPage) {
-            document.getElementById("page").value = newPage;
-            document.getElementById("paginationForm").submit();
-        }
-
-        function changePageSize(newSize) {
-            document.getElementById("pageSize").value = newSize;
-            document.getElementById("page").value = 1; // reset về trang 1
-            document.getElementById("paginationForm").submit();
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            ["comboBox2", "IDNhanVien", "comboBox", "IDHTTT"].forEach(id => {
-                const el = document.getElementById(id);
-                if (el && el.dataset.value) {
-                    el.value = el.dataset.value;
-                }
-            });
-        });
-        document.getElementById('IDChiNhanh').value = _idcn;
     </script>
 </body>
 </html>

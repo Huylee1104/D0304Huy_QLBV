@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using M0304NhanVien.Models;
 
 namespace S0304NhanVien.Services
@@ -12,7 +9,6 @@ namespace S0304NhanVien.Services
 
         public S0304NhanVienService(IWebHostEnvironment env)
         {
-            // Ghép đường dẫn vật lý
             _filePath = Path.Combine(env.WebRootPath, "dist", "data", "json", "W0304", "W0304Dm_NhanVien.json");
         }
 
@@ -29,7 +25,6 @@ namespace S0304NhanVien.Services
             var json = File.ReadAllText(_filePath);
             var nhanVienList = JsonConvert.DeserializeObject<List<M0304NhanVienModel>>(json);
 
-            // Sắp xếp danh sách theo thứ tự Alphabet dựa trên thuộc tính TenNhanVien
             return nhanVienList.OrderBy(nv => nv.Ten).ToList();
         }
     }

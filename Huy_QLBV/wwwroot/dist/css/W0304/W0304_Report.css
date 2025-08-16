@@ -1,40 +1,40 @@
 ﻿html, body {
     height: 100%;
     margin: 0;
-    padding: 10px; /* cách lề toàn trang 10px */
+    padding: 10px;
     box-sizing: border-box;
 }
 
 .content {
-    height: 100%; /* toàn màn hình trừ tiêu đề calc*/
+    height: 100%; 
     display: flex;
     flex-direction: column;
 }
 
 .ngang {
-    flex: 1; /* chiếm toàn bộ phần còn lại */
-    display: flex; /* loc và view nằm ngang */
+    flex: 1; 
+    display: flex; 
 }
 
 .loc {
-    flex: 1; /* 1 phần */
+    flex: 1; 
 }
 
 .view {
-    flex: 4; /* 4 phần => loc/view = 1/4 => loc/(loc+view) = 1/5 */
+    flex: 4; 
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 0 10px 10px 10px;
-    max-height: 100%; /* Giới hạn chiều cao tối đa theo vùng chứa cha */
-    overflow-y: auto; /* bật cuộn dọc cho phần bảng */
+    max-height: 100%; 
+    overflow-y: auto; 
 }
 
 .phan_trang {
     height: 70px;
-    display: flex; /* các phần tử con nằm ngang */
-    align-items: center; /* canh giữa theo chiều dọc */
-    justify-content: flex-end; /* dồn sang phải */
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-end; 
     gap: 10px;
     padding: 0 10px;
 }
@@ -57,14 +57,14 @@
 }
 
 input {
-    border-radius: 5px; /*Bo góc*/
-    border: 1px solid #999; /*Viền*/
+    border-radius: 5px; 
+    border: 1px solid #999; 
     padding-left: 8px;
     font-size: 16px;
 }
 
 input:focus {
-    outline: 2px solid #2a82e0; /* Viền màu xanh dày 3px */
+    outline: 2px solid #2a82e0; 
 }
 
 input:not(:focus):hover {
@@ -72,14 +72,14 @@ input:not(:focus):hover {
 }
 
 select {
-    border-radius: 5px; /*Bo góc*/
-    border: 1px solid #999; /*Viền*/
+    border-radius: 5px; 
+    border: 1px solid #999; 
     padding-left: 8px;
     font-size: 16px;
 }
 
 select:focus {
-    outline: 2px solid #2a82e0; /* Viền màu xanh dày 3px */
+    outline: 2px solid #2a82e0; 
 }
 
 select:not(:focus):hover {
@@ -92,12 +92,12 @@ select:not(:focus):hover {
     overflow-y: auto;
     display: none;
     position: absolute;
-    top: 100%; /* Hiển thị ngay dưới input */
+    top: 100%; 
     left: 0;
     width: 100%;
     background: #fff;
     border-radius: 5px;
-    z-index: 1055; /* Cao hơn modal */
+    z-index: 1055; 
 }
 
 .dropdownList div {
@@ -109,7 +109,6 @@ select:not(:focus):hover {
     background-color: #e9ecef;
 }
 
-/* Mỗi option */
 .option-item {
     display: flex;
     justify-content: space-between;
@@ -117,9 +116,8 @@ select:not(:focus):hover {
     cursor: pointer;
 }
 
-/* Option được highlight mặc định hoặc khi di chuyển bằng phím */
 .option-item.highlight {
-    background-color: #e9ecef; /* Màu mờ */
+    background-color: #e9ecef; 
 }
 
 .highlight-text {
@@ -132,12 +130,12 @@ select:not(:focus):hover {
     flex-direction: column;
     margin: 10px;
     font-size: 16px;
-    position: relative; /* thêm dòng này */
+    position: relative; 
 }
 
 .item .button {
     display: flex;
-    gap: 15px; /* khoảng cách giữa các nút */
+    gap: 15px; 
     align-items: center;
     width: 100%;
     margin-top: 10px;
@@ -158,6 +156,6 @@ select:not(:focus):hover {
 }
 
 .page-link:focus {
-    box-shadow: none !important; /* Bỏ bóng mờ */
-    outline: none !important; /* Bỏ viền nét */
+    box-shadow: none !important; 
+    outline: none !important; 
 }

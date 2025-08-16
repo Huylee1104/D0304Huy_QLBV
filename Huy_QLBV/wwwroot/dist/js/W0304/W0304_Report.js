@@ -1,127 +1,134 @@
-﻿$(function () {
-    var ngayBatDau = $('#myDate').data('ngay'); // Lấy từ data-ngay
+﻿document.addEventListener("DOMContentLoaded", function () {
+    ["comboBox2", "IDNhanVien", "comboBox", "IDHTTT"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.dataset.value) {
+            el.value = el.dataset.value;
+        }
+    });
+
+    if (typeof _idcn !== "undefined") {
+        const chiNhanhEl = document.getElementById("IDChiNhanh");
+        if (chiNhanhEl) {
+            chiNhanhEl.value = _idcn;
+        }
+    } else {
+        console.warn("Biến _idcn chưa được định nghĩa (kiểm tra BienChung.js)");
+    }
+});
+
+function changePage(newPage) {
+    document.getElementById("page").value = newPage;
+    document.getElementById("paginationForm").submit();
+}
+
+function changePageSize(newSize) {
+    document.getElementById("pageSize").value = newSize;
+    document.getElementById("page").value = 1; 
+    document.getElementById("paginationForm").submit();
+}
+
+$(function () {
+    var ngayBatDau = $('#myDate').data('ngay'); 
     $("#myDate").datepicker({
-        format: 'dd-mm-yyyy',         // Định dạng cố định
+        format: 'dd-mm-yyyy',
         autoclose: true,
         todayHighlight: true,
-        language: 'vi' 
+        language: 'vi'
     }).datepicker('update', ngayBatDau);
     console.log("Giá trị ViewBag.NgayBatDau:", ngayBatDau);
-});
 
-document.getElementById('myDate').addEventListener('input', function (e) {
-    const input = e.target;
-    const rawValue = input.value;
-    const cursorPos = input.selectionStart;
+    document.getElementById('myDate').addEventListener('input', function (e) {
+        const input = e.target;
+        const rawValue = input.value;
+        const cursorPos = input.selectionStart;
 
-    // Xóa ký tự không phải số
-    let digits = rawValue.replace(/\D/g, '').slice(0, 8);
+        let digits = rawValue.replace(/\D/g, '').slice(0, 8);
 
-    // Định dạng dd-mm-yyyy
-    let formatted = '';
-    if (digits.length >= 2) {
-        formatted += digits.slice(0, 2) + '-';
-    } else {
-        formatted += digits;
-    }
-    if (digits.length >= 4) {
-        formatted += digits.slice(2, 4) + '-';
-    } else if (digits.length > 2) {
-        formatted += digits.slice(2);
-    }
-    if (digits.length > 4) {
-        formatted += digits.slice(4);
-    }
+        let formatted = '';
+        if (digits.length >= 2) {
+            formatted += digits.slice(0, 2) + '-';
+        } else {
+            formatted += digits;
+        }
+        if (digits.length >= 4) {
+            formatted += digits.slice(2, 4) + '-';
+        } else if (digits.length > 2) {
+            formatted += digits.slice(2);
+        }
+        if (digits.length > 4) {
+            formatted += digits.slice(4);
+        }
 
-    // Gán lại giá trị
-    input.value = formatted;
+        input.value = formatted;
 
-    // Tính lại vị trí con trỏ
-    let newCursorPos = cursorPos;
+        let newCursorPos = cursorPos;
+        if (rawValue.length < formatted.length && formatted[cursorPos] === '-') {
+            newCursorPos++;
+        }
+        input.setSelectionRange(newCursorPos, newCursorPos);
+    });
 
-    // Nếu người dùng vừa gõ vào vị trí chèn dấu, dịch con trỏ thêm 1
-    if (rawValue.length < formatted.length && formatted[cursorPos] === '-') {
-        newCursorPos++;
-    }
+    $('#datepicker-icon').on('click', function () {
+        $('#myDate').datepicker('show');
+    });
 
-    // Khôi phục vị trí con trỏ
-    input.setSelectionRange(newCursorPos, newCursorPos);
-});
-
-$('#datepicker-icon').on('click', function () {
-    $('#myDate').datepicker('show');
-});
-
-// input đến ngày
-$(function () {
-    var ngayKetThuc = $('#myDate2').data('ngay2'); // Lấy từ data-ngay
+    var ngayKetThuc = $('#myDate2').data('ngay2'); 
     $("#myDate2").datepicker({
-        format: 'dd-mm-yyyy',         // Định dạng cố định
+        format: 'dd-mm-yyyy',
         autoclose: true,
         todayHighlight: true,
-        language: 'vi' 
+        language: 'vi'
     }).datepicker('update', ngayKetThuc);
+
+    document.getElementById('myDate2').addEventListener('input', function (e) {
+        const input = e.target;
+        const rawValue = input.value;
+        const cursorPos = input.selectionStart;
+
+        let digits = rawValue.replace(/\D/g, '').slice(0, 8);
+
+        let formatted = '';
+        if (digits.length >= 2) {
+            formatted += digits.slice(0, 2) + '-';
+        } else {
+            formatted += digits;
+        }
+        if (digits.length >= 4) {
+            formatted += digits.slice(2, 4) + '-';
+        } else if (digits.length > 2) {
+            formatted += digits.slice(2);
+        }
+        if (digits.length > 4) {
+            formatted += digits.slice(4);
+        }
+
+        input.value = formatted;
+
+        let newCursorPos = cursorPos;
+        if (rawValue.length < formatted.length && formatted[cursorPos] === '-') {
+            newCursorPos++;
+        }
+        input.setSelectionRange(newCursorPos, newCursorPos);
+    });
+
+    $('#datepicker-icon2').on('click', function () {
+        $('#myDate2').datepicker('show');
+    });
 });
 
-document.getElementById('myDate2').addEventListener('input', function (e) {
-    const input = e.target;
-    const rawValue = input.value;
-    const cursorPos = input.selectionStart;
-
-    // Xóa ký tự không phải số
-    let digits = rawValue.replace(/\D/g, '').slice(0, 8);
-
-    // Định dạng dd-mm-yyyy
-    let formatted = '';
-    if (digits.length >= 2) {
-        formatted += digits.slice(0, 2) + '-';
-    } else {
-        formatted += digits;
-    }
-    if (digits.length >= 4) {
-        formatted += digits.slice(2, 4) + '-';
-    } else if (digits.length > 2) {
-        formatted += digits.slice(2);
-    }
-    if (digits.length > 4) {
-        formatted += digits.slice(4);
-    }
-
-    // Gán lại giá trị
-    input.value = formatted;
-
-    // Tính lại vị trí con trỏ
-    let newCursorPos = cursorPos;
-
-    // Nếu người dùng vừa gõ vào vị trí chèn dấu, dịch con trỏ thêm 1
-    if (rawValue.length < formatted.length && formatted[cursorPos] === '-') {
-        newCursorPos++;
-    }
-
-    // Khôi phục vị trí con trỏ
-    input.setSelectionRange(newCursorPos, newCursorPos);
-});
-
-$('#datepicker-icon2').on('click', function () {
-    $('#myDate2').datepicker('show');
-});
-
-// ngày, tháng, quý, năm
 $('#selectGiaiDoan').change(function () {
     const selectedValue = $(this).val();
     const container = $('#selectContainer');
-    container.empty(); // Xóa cũ
+    container.empty(); 
 
-    // Nếu chỉ Năm hoặc Ngày → canh trái
     if (selectedValue === 'Nam' || selectedValue === 'Ngay') {
         container.css('justify-content', 'flex-start');
     }
-    // Nếu Quý hoặc Tháng → giãn đều
+
     else if (selectedValue === 'Quy' || selectedValue === 'Thang') {
         container.css('justify-content', 'space-around');
     }
 
-    // Luôn có select Năm
     const selectNam = `
 			<div style="width: 48%; min-width: 80px;">
 				<label class="form-label" style="display: block; margin-bottom: 5px; white-space: nowrap;">Năm</label>
@@ -133,7 +140,6 @@ $('#selectGiaiDoan').change(function () {
 		`;
     container.append(selectNam);
 
-    // Nếu chọn Quý hoặc Tháng thì thêm dropdown thứ 2
     if (selectedValue === 'Quy') {
         const selectQuy = `
 				<div style="width: 50%; ">
@@ -162,64 +168,94 @@ $('#selectGiaiDoan').change(function () {
         container.append(selectThang);
     }
     else if (selectedValue === "Ngay") {
-        container.empty(); // Xóa cũ nếu chọn Ngày
+        container.empty(); 
     }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  const select = document.getElementById('selectGiaiDoan');
+    const select = document.getElementById('selectGiaiDoan');
     const selectContainer = document.getElementById('selectContainer');
-    const fromItem = document.getElementById('myDate')?.closest('.item');
-    const toItem   = document.getElementById('myDate2')?.closest('.item');
+    const fromInput = document.getElementById('myDate');
+    const toInput = document.getElementById('myDate2');
+    const fromItem = fromInput?.closest('.item');
+    const toItem = toInput?.closest('.item');
 
-    // 1. Inject CSS layout
+    const ALLOWED = new Set(['Nam', 'Quy', 'Thang', 'Ngay']);
+    const DEFAULT = 'Nam';
+
     const style = document.createElement('style');
     style.textContent = `
-    #selectContainer {
+      #selectContainer {
         display: flex;
-    flex-wrap: nowrap;       /* luôn cùng hàng */
-    align-items: flex-start;
-    gap: 10px;
-    }
-    #selectContainer > div {
-        flex: 1;
-    min-width: 80px;
-    }
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      #selectContainer > div { flex: 1; min-width: 80px; }
+      .date-locked {
+        background: #f5f5f5;
+        cursor: not-allowed;
+      }
+      .date-locked::-webkit-calendar-picker-indicator { opacity: 0.35; }
     `;
     document.head.appendChild(style);
 
-  // 2. Ẩn/hiện phần tử
-  const toggleDisplay = (el, on) => {
-    if (!el) return;
-    el.style.display = on ? '' : 'none';
-  };
-
-    // 3. Cập nhật UI
-    function updateUI() {
-    const val = select.value;
-    const isNgay = val === 'Ngay';
-
-    toggleDisplay(fromItem, isNgay);
-    toggleDisplay(toItem, isNgay);
-    toggleDisplay(selectContainer, !isNgay);
-
-    if (val === 'Nam' || val === 'Ngay') {
-        selectContainer.style.justifyContent = 'flex-start';
-    } else if (val === 'Quy' || val === 'Thang') {
-        selectContainer.style.justifyContent = 'space-around';
+    const blockEvt = (e) => { e.preventDefault(); e.stopImmediatePropagation(); };
+    function setInteractable(input, enable) {
+        if (!input) return;
+        input.readOnly = !enable;
+        input.classList.toggle('date-locked', !enable);
+        if (!enable) {
+            input.addEventListener('mousedown', blockEvt, true);
+            input.addEventListener('touchstart', blockEvt, true);
+            input.addEventListener('keydown', blockEvt, true);
+            input.tabIndex = -1;
+        } else {
+            input.removeEventListener('mousedown', blockEvt, true);
+            input.removeEventListener('touchstart', blockEvt, true);
+            input.removeEventListener('keydown', blockEvt, true);
+            input.tabIndex = 0;
+        }
     }
 
-    // Lưu lựa chọn để reload vẫn nhớ
-    localStorage.setItem('giaiDoan', val);
-  }
+    function updateUI() {
+        const val = select.value;
+        const isNgay = val === 'Ngay';
 
-    // 4. Khôi phục trạng thái khi load
-    const saved = localStorage.getItem('giaiDoan');
-    if (saved) select.value = saved;
+        if (fromItem) fromItem.style.display = '';
+        if (toItem) toItem.style.display = '';
 
-    // 5. Sự kiện và render lần đầu
-    select.addEventListener('change', updateUI);
+        if (selectContainer) {
+            if (val === 'Nam' || val === 'Ngay') {
+                selectContainer.style.justifyContent = 'flex-start';
+            } else if (val === 'Quy' || val === 'Thang') {
+                selectContainer.style.justifyContent = 'space-around';
+            }
+        }
+
+        setInteractable(fromInput, isNgay);
+        setInteractable(toInput, isNgay);
+    }
+
+    if (!sessionStorage.getItem('firstLoadDone')) {
+        select.value = DEFAULT;
+        localStorage.setItem('giaiDoan', DEFAULT);
+        sessionStorage.setItem('firstLoadDone', 'true');
+    } else {
+        const saved = localStorage.getItem('giaiDoan');
+        if (ALLOWED.has(saved)) {
+            select.value = saved;
+        } else {
+            select.value = DEFAULT;
+        }
+    }
+
     updateUI();
+
+    select.addEventListener('change', () => {
+        updateUI();
+        localStorage.setItem('giaiDoan', select.value);
+    });
 });
 
 $(document).ready(function () {
@@ -229,7 +265,6 @@ $(document).ready(function () {
     const currentMonth = new Date().getMonth() + 1;
     const currentQuarter = Math.floor((new Date().getMonth()) / 3) + 1;
 
-    // Nếu lần đầu load sau restart server → xóa localStorage
     if (isFirstLoadFromServer) {
         localStorage.removeItem("filterState");
     }
@@ -311,7 +346,6 @@ $(document).ready(function () {
         }
         else if (state.giaiDoan === "Ngay") {
             container.css('justify-content', 'space-around');
-            // Ngày thì dùng trực tiếp datepicker, không cần select thêm
         }
     }
 
@@ -391,7 +425,6 @@ $(document).ready(function () {
         localStorage.setItem("filterState", JSON.stringify(state));
     }
 
-    // Khi thay đổi ngày ở myDate
     $('#datepicker').on('changeDate', function (e) {
         let startDate = $('#myDate').datepicker('getDate');
         let endDate = $('#myDate2').datepicker('getDate');
@@ -401,7 +434,6 @@ $(document).ready(function () {
         }
     });
 
-    // Khi thay đổi ngày ở myDate2
     $('#datepicker2').on('changeDate', function (e) {
         let startDate = $('#myDate').datepicker('getDate');
         let endDate = $('#myDate2').datepicker('getDate');

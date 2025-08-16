@@ -1,3 +1,0 @@
-D:\Code\website\Huy_QLBV\wwwroot\dist\js\W0304\chonngay.bundle.js.LICENSE.txt
-D:\Code\website\Huy_QLBV\wwwroot\dist\js\W0304\chonngay.bundle.js
-D:\Code\website\Huy_QLBV\wwwroot\dist\js\W0304\combobox.js
