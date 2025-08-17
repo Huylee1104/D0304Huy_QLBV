@@ -3,21 +3,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 *, *::before, *::after {
     box-sizing: inherit;
-}
-
-// .header {
-    height: 56px;
-    flex-shrink: 0;
-}
-
-// body {
-    display: flex;
-    flex-direction: column;
 }
 
 .card.p-1 {
@@ -26,68 +16,115 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+    border-radius: 10px; 
+    overflow: hidden; 
+    background: #fff; 
 }
 
 .content {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    flex: 1;
     min-height: 0;
-    padding-bottom: 10px; 
+    position: relative;
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    
 }
 
 .ngang {
-    flex: 1 1 auto;
     display: flex;
-    gap: 10px;
+    flex: 1;
     min-height: 0;
 }
 
 .loc {
-    flex: 1;
-    padding: 10px 10px 20px; 
-    background: #f8f9fa;
-    border-radius: 8px;
-    overflow: auto;
-    min-height: 0;
+    flex: 0 0 20%;
+    max-width: 20%;
+    padding-right: 10px;
+    overflow-y: auto;
 }
 
 .view {
-    flex: 4;
-    padding: 10px 10px 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    overflow: auto;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#bangKeThuContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     min-height: 0;
 }
 
+    #bangKeThuContainer > div:first-child {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+    }
+
 .phan_trang {
-    flex-shrink: 0;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
     height: 70px;
     display: flex;
+    justify-content: flex-end; 
     align-items: center;
-    justify-content: flex-end;
-    padding: 0 10px;
-    gap: 5px;
-    background: #f1f3f5;
+    gap: 8px;
     border-radius: 8px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    margin: 0 10px;
 }
 
-.card.p-1, .content, .loc, .view {
-    padding-bottom: max( env(safe-area-inset-bottom, 0px), 10px );
-}
+    .phan_trang > * {
+        height: 100%; 
+        display: flex;
+        align-items: center; 
+        margin: 0;
+        padding: 0 8px; 
+        box-sizing: border-box;
+    }
+
+    .phan_trang nav ul {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 4px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .phan_trang .dropdown-position,
+    .phan_trang .pagination-wrapper,
+    .phan_trang .mt-1 {
+        display: inline-flex;
+        align-items: center;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+        .phan_trang .dropdown-position select {
+            margin-left: 6px; 
+            min-width: 70px; 
+        }
 
 .form_table {
     border-collapse: collapse;
     width: 100%;
+    table-layout: auto;
 }
-.form_table th,
-.form_table td {
-    border: 1px solid black;
-    padding: 4px;
-}
+
+    .form_table th,
+    .form_table td {
+        border: 1px solid black;
+        padding: 4px;
+    }
 
 .mau_header th {
     background-color: darkgray;
@@ -97,34 +134,34 @@
 }
 
 input {
-    border-radius: 5px; 
-    border: 1px solid #999; 
+    border-radius: 5px;
+    border: 1px solid #999;
     padding-left: 8px;
     font-size: 16px;
 }
 
-input:focus {
-    outline: 2px solid #2a82e0; 
-}
+    input:focus {
+        outline: 2px solid #2a82e0;
+    }
 
-input:not(:focus):hover {
-    border-color: #000;
-}
+    input:not(:focus):hover {
+        border-color: #000;
+    }
 
 select {
-    border-radius: 5px; 
-    border: 1px solid #999; 
+    border-radius: 5px;
+    border: 1px solid #999;
     padding-left: 8px;
     font-size: 16px;
 }
 
-select:focus {
-    outline: 2px solid #2a82e0; 
-}
+    select:focus {
+        outline: 2px solid #2a82e0;
+    }
 
-select:not(:focus):hover {
-    border-color: #000;
-}
+    select:not(:focus):hover {
+        border-color: #000;
+    }
 
 .dropdownList {
     border: 1px solid #ccc;
@@ -132,22 +169,22 @@ select:not(:focus):hover {
     overflow-y: auto;
     display: none;
     position: absolute;
-    top: 100%; 
+    top: 100%;
     left: 0;
     width: 100%;
     background: #fff;
     border-radius: 5px;
-    z-index: 1055; 
+    z-index: 1055;
 }
 
-.dropdownList div {
-    padding: 5px;
-    cursor: pointer;
-}
+    .dropdownList div {
+        padding: 5px;
+        cursor: pointer;
+    }
 
-.dropdownList div:hover {
-    background-color: #e9ecef;
-}
+        .dropdownList div:hover {
+            background-color: #e9ecef;
+        }
 
 .option-item {
     display: flex;
@@ -156,9 +193,9 @@ select:not(:focus):hover {
     cursor: pointer;
 }
 
-.option-item.highlight {
-    background-color: #e9ecef; 
-}
+    .option-item.highlight {
+        background-color: #e9ecef;
+    }
 
 .highlight-text {
     background-color: yellow;
@@ -170,16 +207,16 @@ select:not(:focus):hover {
     flex-direction: column;
     margin: 10px;
     font-size: 16px;
-    position: relative; 
+    position: relative;
 }
 
-.item .button {
-    display: flex;
-    gap: 15px; 
-    align-items: center;
-    width: 100%;
-    margin-top: 10px;
-}
+    .item .button {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        width: 100%;
+        margin-top: 10px;
+    }
 
 .trai {
     text-align: left !important;
@@ -196,6 +233,36 @@ select:not(:focus):hover {
 }
 
 .page-link:focus {
-    box-shadow: none !important; 
-    outline: none !important; 
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+@media (max-width: 768px) {
+    .ngang {
+        flex-direction: column; 
+    }
+
+    .loc {
+        flex: 0 0 auto;
+        max-width: 100%;
+        padding-right: 0;
+        padding-bottom: 10px;
+    }
+
+    .view {
+        flex: 1;
+    }
+
+    .phan_trang {
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        margin: 0 10px;
+    }
+
+        .phan_trang .dropdown-position,
+        .phan_trang .pagination-wrapper,
+        .phan_trang .mt-1 {
+            flex-wrap: wrap; 
+        }
 }

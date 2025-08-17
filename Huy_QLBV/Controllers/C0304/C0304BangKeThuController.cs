@@ -1,19 +1,21 @@
 ﻿using ClosedXML.Excel;
-using S0304HTTT.Services;
+using M0304.Models.BangKeThu;
+using M0304.Models.PhanTrang;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using S0304NhanVien.Services;
-using S0304FirstLoadFlat.Services;
-using S0304ThongTinDoanhNghiep.Services;
-using S0304BangKeThu.Services;
-using S0304Report.Services;
 using P0304.PDFDocument;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
+using S0304BangKeThu.Services;
+using S0304FirstLoadFlat.Services;
+using S0304HTTT.Services;
+using S0304NhanVien.Services;
+using S0304Report.Services;
+using S0304ThongTinDoanhNghiep.Services;
 using System.Data;
 using System.Globalization;
 
@@ -51,7 +53,7 @@ namespace Huy_QLBV.Controllers.C0304
             //_memoryCache = memoryCache;
         }
         [HttpGet("")]
-        public IActionResult Index()
+        public async Task<IActionResult>()
         {
             //var quyenVaiTro = await _memoryCache.getQuyenVaiTro(_maChucNang);
             //if (quyenVaiTro == null)
@@ -85,12 +87,21 @@ namespace Huy_QLBV.Controllers.C0304
             System.Diagnostics.Debug.WriteLine("DSNhanVien: " + Newtonsoft.Json.JsonConvert.SerializeObject(dsNhanVien));
             ViewBag.DSNhanVien = dsNhanVien;
 
-            return View("~/Views/V0304/V0304BangKeThu.cshtml");
+            var model = new M0304PhanTrang
+            {
+                Data = new List<M0304BangKeThu>(),
+                CurrentPage = 1,
+                TotalPages = 1,
+                PageSize = 15,
+                TotalItems = 0
+            };
+
+            return View("~/Views/V0304/V0304BangKeThu.cshtml", model);
         }
 
         [HttpPost("index")]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(string NgayBatDau, string NgayKetThuc, 
+        public async Task<IActionResult>(string NgayBatDau, string NgayKetThuc, 
             long IDChiNhanh, long? IDHTTT, long? IDNhanVien, int page, int pageSize)
         {
             //var quyenVaiTro = await _memoryCache.getQuyenVaiTro(_maChucNang);
@@ -157,7 +168,6 @@ namespace Huy_QLBV.Controllers.C0304
             if (page > totalPages) page = totalPages;
 
             var pagedData = data.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            ViewBag.Data = pagedData;
 
             var dsHTTT = _htttService.GetAllHTTT();
             ViewBag.DSHTTT = dsHTTT;
@@ -177,12 +187,15 @@ namespace Huy_QLBV.Controllers.C0304
             ViewBag.NgayKetThuc = NgayKetThuc;
             ViewBag.IDChiNhanh = IDChiNhanh;
 
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-            ViewBag.PageSize = pageSize;
-            ViewBag.TotalItems = totalItems;
-
-            return View("~/Views/V0304/V0304BangKeThu.cshtml");
+            var model = new M0304PhanTrang
+            {
+                Data = pagedData,
+                CurrentPage = page,
+                TotalPages = totalPages,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+            };
+            return PartialView("~/Views/V0304/V0304BangKeThuPartial.cshtml", model);
         }
 
         [HttpGet("ExportPdf")]
@@ -243,7 +256,7 @@ namespace Huy_QLBV.Controllers.C0304
         if (reportData?.Data == null || !reportData.Data.Any())
         {
             TempData["ToastType"] = "warning";
-            TempData["ToastMessage"] = "Không có dữ liệu để xuất PDF.";
+            TempData["ToastMessage"] = "Không có dữ liệu để xuất Excel.";
 
             return RedirectToAction("");
         }

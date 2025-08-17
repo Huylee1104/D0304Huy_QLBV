@@ -10,12 +10,7 @@
 @{
     var jsonNhanVien = Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.DSNhanVien);
 }
-@{
-    var list = ViewBag.Data as List<M0304.Models.BangKeThu.M0304BangKeThu>;
-}
-@{
-    var stt = 1;
-}
+@model M0304.Models.PhanTrang.M0304PhanTrang
 @{
     var toastType = TempData["ToastType"] as string;
     var toastMsgJson = System.Text.Json.JsonSerializer.Serialize(
@@ -48,7 +43,8 @@
             <div class="ngang">
                 <div class="loc">
                     <div>
-                        <form id="myForm" action="~/C0304BangKeThu/Index" method="post">
+                        <form id="myForm" asp-action="Index" asp-controller="C0304BangKeThu" method="post" onsubmit="return false;">
+                            @Html.AntiForgeryToken()
                             <div class="item">
                                 <div class="row" style="padding:0; margin-right: 10px">
                                     <div style="width: 100%; padding:0; margin: 0 10px">
@@ -100,7 +96,7 @@
                             <div class="item">
                                 <div class="button">
                                     <div>
-                                        <button class="btn btn-primary" type="submit">Tải danh sách</button>
+                                        <button class="btn btn-primary" type="button" id="btnTaiDanhSach">Tải danh sách</button>
                                     </div>
                                     @{
                                         bool hasPermission = ViewBag.quyenVaiTro.Xuat;
@@ -129,111 +125,10 @@
                     </div>
                 </div>
                 <div class="view">
-                    <table class="form_table">
-                        <thead>
-                            <tr class="mau_header">
-                                <th class="giua">STT</th>
-                                <th class="giua">Mã y tế</th>
-                                <th class="giua">Họ và tên</th>
-                                <th class="giua">Quyển sổ</th>
-                                <th class="giua">Số biên lai</th>
-                                <th class="giua">Loại</th>
-                                <th class="giua">Ngày thu</th>
-                                <th class="giua">Hủy</th>
-                                <th class="giua">Hoàn</th>
-                                <th class="giua">Số tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                var tong = (ViewBag.CurrentPage - 1) * ViewBag.PageSize + 1;
-                                if (list != null && list.Count > 0)
-                                {
-                                    foreach (var item in list)
-                                    {
-                                        <tr>
-                                            <td class="giua">@stt</td>
-                                            <td class="giua">@item.MaYTe</td>
-                                            <td class ="trai">@item.HoVaTen</td>
-                                            <td class="giua">@item.QuyenSo</td>
-                                            <td class="giua">@item.SoBienLai</td>
-                                            <td class="giua">@item.Loai</td>
-                                            <td class="giua">@(item.NgayThu?.ToString("dd/MM/yyyy"))</td>
-                                            <td class ="phai">@(item.Huy?.ToString("N2", System.Globalization.CultureInfo.InvariantCulture))</td>
-                                            <td class="phai">@(item.Hoan?.ToString("N2", System.Globalization.CultureInfo.InvariantCulture))</td>
-                                            <td class="phai">@(item.SoTien?.ToString("N2", System.Globalization.CultureInfo.InvariantCulture))</td>
-                                        </tr>
-                                        stt++;
-                                    }
-                                }
-                                else
-                                {
-                                    <tr><td colspan="10" class="text-center">Không có dữ liệu</td></tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>  
-            </div>
-            <div class="phan_trang">
-                <div class="dropdown-position">
-                    <form asp-action="Index" method="post" class="form-inline" style="display: flex; align-items: center; gap: 8px;">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="page" value="1" />
-
-                        <label for="pageSize" class="mb-0" style="margin-right: 6px; white-space: nowrap;">Số bản ghi mỗi trang:</label>
-                        <select name="pageSize" id="pageSize" class="form-control " style="width:auto; min-width:70px; padding-right: 10px;" onchange="this.form.submit()">
-                            <option value="5" selected="@(ViewBag.PageSize == 5)">5</option>
-                            <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
-                            <option value="15" selected="@(ViewBag.PageSize == 15)">15</option>
-                        </select>
-                    </form>
-                </div>
-                <div class="dropdown-position">
-                    <nav aria-label="Page navigation" class="pagination-wrapper">
-                        <ul class="pagination mb-0">
-
-                            @if (ViewBag.TotalPages > 1)
-                            {
-                                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                                    <form asp-action="Index" method="post" class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="page" value="@(ViewBag.CurrentPage - 1)" />
-                                        <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
-                                        <button type="submit" class="page-link" @(ViewBag.CurrentPage == 1 ? "disabled" : "")>Trước</button>
-                                    </form>
-                                </li>
-
-                                @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
-                                {
-                                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                                        <form asp-action="Index" method="post" class="d-inline">
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="page" value="@i" />
-                                            <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
-                                            <button type="submit" class="page-link">@i</button>
-                                        </form>
-                                    </li>
-                                }
-
-                                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                                    <form asp-action="Index" method="post" class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="page" value="@(ViewBag.CurrentPage + 1)" />
-                                        <input type="hidden" name="pageSize" value="@ViewBag.PageSize" />
-                                        <button type="submit" class="page-link" @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")>Sau</button>
-                                    </form>
-                                </li>
-                            }
-                        </ul>
-                    </nav>
-                </div>
-                @if (ViewBag.TotalPages > 1 && ViewBag.TotalItems > 0)
-                {
-                    <div class="dropdown-position">
-                        Trang @ViewBag.CurrentPage / @ViewBag.TotalPages - Tổng @ViewBag.TotalItems bản ghi
+                    <div id="bangKeThuContainer">
+                        @await Html.PartialAsync("~/Views/V0304/V0304BangKeThuPartial.cshtml", Model)
                     </div>
-                }
+                </div>
             </div>
         </div>
     </div>
@@ -256,6 +151,74 @@
             });
         </script>
     }
+
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function () {
+            var form = document.getElementById("myForm");
+            var btnTaiDanhSach = document.getElementById("btnTaiDanhSach");
+            var container = document.getElementById("bangKeThuContainer");
+
+            btnTaiDanhSach.addEventListener("click", function () {
+                submitForm(1);
+            });
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                submitForm(1);
+            });
+
+            container.addEventListener("click", function (e) {
+                var link = e.target.closest(".page-link");
+                if (!link) return;
+
+                var li = link.closest(".page-item");
+                if (li && li.classList.contains("disabled")) {
+                    e.preventDefault();
+                    return;
+                }
+
+                e.preventDefault();
+                var page = parseInt(link.getAttribute("data-page"), 10);
+                if (!isNaN(page)) {
+                    submitForm(page);
+                }
+            });
+
+            container.addEventListener("change", function (e) {
+                if (e.target && e.target.id === "pageSize") {
+                    submitForm(1); 
+                }
+            });
+
+            function submitForm(page) {
+                var formData = new FormData(form);
+
+                formData.set("page", page);
+
+                var pageSizeEl = container.querySelector("#pageSize");
+                if (pageSizeEl && pageSizeEl.value) {
+                    formData.set("pageSize", pageSizeEl.value);
+                }
+
+                var token = form.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                fetch(form.action, {
+                    method: "POST",
+                    body: new URLSearchParams(formData),
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "RequestVerificationToken": token
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    container.innerHTML = html;
+                })
+                .catch(() => alert("Có lỗi khi tải danh sách!"));
+            }
+        });
+    </script>
+
     <script>
         const provincesDataHTTT = @Html.Raw(jsonHTTT);
         const provincesDataNhanVien = @Html.Raw(jsonNhanVien);
